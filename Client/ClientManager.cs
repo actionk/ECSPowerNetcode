@@ -1,13 +1,14 @@
 using System;
 using Plugins.ECSEntityBuilder.Worlds;
 using Plugins.ECSPowerNetcode.Client.Components;
+using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Client
 {
-    public class ClientManager
+    public class ClientManager : ANetworkEntityManager
     {
         public Entity ConnectionEntity { get; private set; }
         public Entity CommandHandlerEntity { get; private set; }

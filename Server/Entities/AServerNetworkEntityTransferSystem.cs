@@ -27,6 +27,21 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
 
                     PostUpdateCommands.RemoveComponent<TransferNetworkEntityToAllClients>(entity);
                 });
+
+            Entities
+                .WithAll<TSelector, NetworkEntity, TransferNetworkEntityToClient>()
+                .ForEach((Entity entity, DynamicBuffer<TransferNetworkEntityToClient> clients, ref NetworkEntity networkEntity, ref TSelector selectorComponent) =>
+                {
+                    var command = CreateTransferCommandForEntity(entity, networkEntity, selectorComponent);
+                    foreach (var clientEntity in clients)
+                    {
+                        ServerToClientRpcCommandBuilder.SendTo(clientEntity.clientConnection)
+                            .AddCommand(command)
+                            .Build(PostUpdateCommands);
+                    }
+
+                    PostUpdateCommands.RemoveComponent<TransferNetworkEntityToClient>(entity);
+                });
         }
     }
 }

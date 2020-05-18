@@ -10,13 +10,19 @@ namespace Plugins.ECSPowerNetcode.Client.Entities
         where TCommand : struct, INetworkEntityCopyRpcCommand
     {
         protected abstract void CreateNetworkEntity(ulong networkEntityId, TCommand command);
+        protected abstract void SynchronizeNetworkEntity(Entity entity, TCommand command);
 
         protected override void OnUpdate()
         {
             Entities
                 .ForEach((Entity entity, ref TCommand command, ref ReceiveRpcCommandRequestComponent requestComponent) =>
                 {
-                    CreateNetworkEntity(command.NetworkEntityId, command);
+                    var existingEntity = ClientManager.Instance.GetEntityByNetworkEntityId(command.NetworkEntityId);
+                    if (existingEntity != Entity.Null)
+                        SynchronizeNetworkEntity(existingEntity, command);
+                    else
+                        CreateNetworkEntity(command.NetworkEntityId, command);
+
                     PostUpdateCommands.DestroyEntity(entity);
                 });
         }

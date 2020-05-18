@@ -18,7 +18,7 @@ namespace Plugins.ECSPowerNetcode.Shared
             return m_entities.GetValueOrDefault(networkEntityId, Entity.Null);
         }
 
-        public Dictionary<ulong, Entity> All => m_entities;
+        public Dictionary<ulong, Entity> AllNetworkEntities => m_entities;
 
         public Entity this[ulong index] => m_entities[index];
     }
