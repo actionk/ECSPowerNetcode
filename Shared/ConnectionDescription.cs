@@ -7,5 +7,7 @@ namespace Plugins.ECSPowerNetcode.Shared
         public int networkId;
         public Entity connectionEntity;
         public Entity commandHandlerEntity;
+
+        public bool IsEmpty => networkId == 0;
     }
 }

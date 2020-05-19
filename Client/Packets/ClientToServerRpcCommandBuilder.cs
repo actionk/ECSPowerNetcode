@@ -7,7 +7,7 @@ namespace Plugins.ECSPowerNetcode.Client.Packets
     {
         protected override ClientToServerRpcCommandBuilder Self => this;
 
-        public static ClientToServerRpcCommandBuilder Create<T>(T command) where T : struct, IRpcCommand
+        public static ClientToServerRpcCommandBuilder Send<T>(T command) where T : struct, IRpcCommand
         {
             return new ClientToServerRpcCommandBuilder()
                 .AddComponentData(command)
