@@ -5,7 +5,7 @@ The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packa
 ## Install
 
 You can either just put the files into `Assets/Plugins/ECSEntityBuilder` or use it as a submodule:
-```
+```sh
 git submodule add https://github.com/actionk/ECSPowerNetcode.git Assets/Plugins/ECSPowerNetcode
 ```
 
@@ -17,7 +17,7 @@ The library depends on [UnityECSEntityBuilder](https://github.com/actionk/UnityE
 
 ## Starting a server and connecting to it locally
 
-```
+```cs
 ServerManager.Instance.StartServer(7979);
 ClientManager.Instance.ConnectToServer(7979);
 ```
@@ -28,7 +28,7 @@ After doing so, the library will automatically establish a connection and create
 
 Each connection is described by these parameters:
 
-```
+```cs
 public struct ConnectionDescription
 {
     public int networkId; // unique network id value for client-server connection
@@ -53,7 +53,7 @@ public struct ConnectionDescription
 
 ### Client-side
 
-```
+```cs
 ClientConnectionSystemGroup
 ClientRequestProcessingSystemGroup
 ClientNetworkEntitySystemGroup
@@ -70,7 +70,7 @@ ClientGameSimulationSystemGroup
 
 ### Server-side
 
-```
+```cs
 ServerConnectionSystemGroup
 ServerRequestProcessingSystemGroup
 ServerNetworkEntitySystemGroup
@@ -91,7 +91,7 @@ First of all, you have to create an [IRpcCommand](https://docs.unity3d.com/Packa
 
 ### Client-side
 
-```
+```cs
 ClientToServerRpcCommandBuilder
     .Send(new ClientPlayerLoginCommand {localPlayerSide = PlayerManager.LocalPlayerSide.LEFT})
     .Build(PostUpdateCommands);
@@ -104,7 +104,7 @@ Where `ClientPlayerLoginCommand` implements `IRpcCommand`
 
 You can specify which client to send the command to:
 
-```
+```cs
 ServerToClientRpcCommandBuilder
     .SendTo(clientConnectionEntity, command)
     .Build(PostUpdateCommands);
@@ -116,7 +116,7 @@ ServerToClientRpcCommandBuilder
 
 Or you can simply broadcast:
 
-```
+```cs
 ServerToClientRpcCommandBuilder
     .Broadcast(command)
     .Build(PostUpdateCommands);
@@ -126,4 +126,165 @@ ServerToClientRpcCommandBuilder
 
 Usually your way of organizing entities in client-server architecture with ECS would look like that:
 
-[Organizing entities](.static/organizing_entities.png)
+![](./.static/organizing_entities.png)
+
+That's for, the library provides you with a way of synchronizing entities without using ghost components:
+
+![](./.static/synchronizing_entities.png)
+
+### Creating an entity on server side
+
+You start with creating an entity builder by inheriting your builder from `ServerNetworkEntityBuilder`:
+
+```cs
+public class ServerPlayerBuilder : ServerNetworkEntityBuilder<ServerPlayerBuilder>
+{
+    protected override ServerPlayerBuilder Self => this;
+
+    public static ServerPlayerBuilder Create(int networkId, Entity connection, uint playerId, PlayerManager.LocalPlayerSide localPlayerSide)
+    {
+        return new ServerPlayerBuilder(networkId, connection, playerId, localPlayerSide);
+    }
+
+    private ServerPlayerBuilder(int networkId, Entity connection, uint playerId, PlayerManager.LocalPlayerSide localPlayerSide) : base()
+    {
+        CreateFromArchetype<PlayerArchetype>(WorldType.SERVER);
+        SetComponentData(new Scale {Value = 1});
+        AddComponentData(new ServerPlayer
+        {
+            networkId = networkId,
+            connection = connection,
+            playerId = playerId,
+            localPlayerSide = localPlayerSide
+        });
+    }
+}
+```
+
+### Transferring the entity
+
+Then, you create an RPC command to send the entity to the clients:
+
+```cs
+[BurstCompile]
+public struct PlayerTransferCommand : INetworkEntityCopyRpcCommand
+{
+    public ulong NetworkEntityId => networkEntityId;
+
+    public int networkId;
+    public ulong networkEntityId;
+    public uint playerId;
+    public PlayerManager.LocalPlayerSide localPlayerSide;
+    public float3 position;
+
+    public void Serialize(ref DataStreamWriter writer)
+    {
+        writer.WriteInt(networkId);
+        writer.WriteULong(networkEntityId);
+        writer.WriteUInt(playerId);
+        writer.WriteByte((byte) localPlayerSide);
+
+        writer.WriteFloat(position.x);
+        writer.WriteFloat(position.y);
+        writer.WriteFloat(position.z);
+    }
+
+    public void Deserialize(ref DataStreamReader reader)
+    {
+        networkId = reader.ReadInt();
+        networkEntityId = reader.ReadULong();
+        playerId = reader.ReadUInt();
+        localPlayerSide = (PlayerManager.LocalPlayerSide) reader.ReadByte();
+
+        position = new float3(
+            reader.ReadFloat(),
+            reader.ReadFloat(),
+            reader.ReadFloat()
+        );
+    }
+
+    #region Implementation
+
+    public PortableFunctionPointer<RpcExecutor.ExecuteDelegate> CompileExecute()
+    {
+        return INVOKE_EXECUTE_FUNCTION_POINTER;
+    }
+
+    [BurstCompile]
+    private static void InvokeExecute(ref RpcExecutor.Parameters parameters)
+    {
+        RpcExecutor.ExecuteCreateRequestComponent<PlayerTransferCommand>(ref parameters);
+    }
+
+    private static readonly PortableFunctionPointer<RpcExecutor.ExecuteDelegate> INVOKE_EXECUTE_FUNCTION_POINTER =
+        new PortableFunctionPointer<RpcExecutor.ExecuteDelegate>(InvokeExecute);
+
+    #endregion
+
+    #region Sender
+
+    public class CopyPlayerCommandSender : RpcCommandRequestSystem<PlayerTransferCommand>
+    {
+    }
+
+    #endregion
+}
+```
+
+Then, for creating the command, you create a system inherited from `AServerNetworkEntityTransferSystem`:
+
+```cs
+[UpdateInGroup(typeof(ServerNetworkEntitySystemGroup))]
+public class ServerPlayerTransferSystem : AServerNetworkEntityTransferSystem<ServerPlayer, PlayerTransferCommand>
+{
+    protected override PlayerTransferCommand CreateTransferCommandForEntity(Entity entity, NetworkEntity networkEntity, ServerPlayer selectorComponent)
+    {
+        return new PlayerTransferCommand
+        {
+            networkId = selectorComponent.networkId,
+            networkEntityId = networkEntity.networkEntityId,
+            playerId = selectorComponent.playerId,
+            localPlayerSide = selectorComponent.localPlayerSide,
+            position = EntityManager.GetComponentData<Translation>(entity).Value
+        };
+    }
+}
+```
+
+### Creating the entity on the client side
+
+And the system for consuming this command on the client side:
+
+```cs
+[UpdateInGroup(typeof(ClientEarlyUpdateSystemGroup))]
+public class ClientPlayerTransferSystem : AClientNetworkEntityTransferSystem<PlayerTransferCommand>
+{
+    protected override void CreateNetworkEntity(ulong networkEntityId, PlayerTransferCommand command)
+    {
+        ClientPlayerBuilder
+            .Create(command)
+            .Build(EntityManager);
+    }
+
+    protected override void SynchronizeNetworkEntity(Entity entity, PlayerTransferCommand command)
+    {
+        EntityWrapper.Wrap(entity, PostUpdateCommands)
+            .SetComponentData(new Translation {Value = command.position});
+    }
+}
+```
+
+That's it! When you server entity is created, it will be automatically transferred to the client side by using `TransferNetworkEntityToAllClients`, which is described below
+
+### Manually control when you want your entity to be transferred to client
+
+You have two possibilities of controlling that:
+
+1. By adding `TransferNetworkEntityToAllClients` component to your network entity. This will automatically send the transfer command to all the clients connected
+
+2. By adding a buffer of `TransferNetworkEntityToClient` and specifing the client connection to send the entity to. You can use EntityWrapper to use an existing buffer or create one if it doesn't exist:
+
+```cs
+EntityWrapper.Wrap(entity, EntityManager)
+    .AddElementToBuffer(new TransferNetworkEntityToClient(reqSrcSourceConnection));
+```
