@@ -276,7 +276,7 @@ public class ClientPlayerTransferSystem : AClientNetworkEntityTransferSystem<Pla
 
 That's it! When you server entity is created, it will be automatically transferred to the client side by using `TransferNetworkEntityToAllClients`, which is described below
 
-### Manually control when you want your entity to be transferred to client
+## Manually control when you want your entity to be transferred to client
 
 You have two possibilities of controlling that:
 
