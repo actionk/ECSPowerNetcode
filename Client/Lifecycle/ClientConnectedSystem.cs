@@ -1,6 +1,6 @@
+using Plugins.ECSEntityBuilder;
 using Plugins.ECSPowerNetcode.Client.Components;
 using Plugins.ECSPowerNetcode.Client.Groups;
-using Plugins.UnityExtras.Logs;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
@@ -19,8 +19,13 @@ namespace Plugins.ECSPowerNetcode.Client.Lifecycle
                 {
                     Debug.Log($"[Client] Connection to server established with network id = [{id.Value}]");
 
-                    var commandHandler = EntityManager.CreateEntity();
-                    PostUpdateCommands.AddComponent(commandHandler, new ClientToServerCommandHandler());
+                    EntityWrapper.Wrap(connectionEntity, EntityManager)
+                        .SetName($"ServerConnection_{id.Value}");
+
+                    var commandHandler = EntityWrapper.CreateEntity(EntityManager)
+                        .AddComponent<ClientToServerCommandHandler>()
+                        .SetName($"ServerConnection_{id.Value}_CommandHandler")
+                        .Entity;
 
                     ClientManager.Instance.OnConnectionEstablished(connectionEntity, commandHandler, id.Value);
 
