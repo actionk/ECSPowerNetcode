@@ -1,6 +1,6 @@
 # ECSPowerNetcode
 
-The library is made on top of the (Unity Netcode)[https://docs.unity3d.com/Packages/com.unity.netcode@0.1/manual/index.html] package and saves you some time on configuring it / provides tools for client-server communication.
+The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packages/com.unity.netcode@0.1/manual/index.html) package and saves you some time on configuring it / provides tools for client-server communication.
 
 ## Install
 
@@ -11,7 +11,7 @@ git submodule add https://github.com/actionk/ECSPowerNetcode.git Assets/Plugins/
 
 ## Dependencies
 
-The library depends on (UnityECSEntityBuilder)[https://github.com/actionk/UnityECSEntityBuilder] and will not run without it.
+The library depends on [UnityECSEntityBuilder](https://github.com/actionk/UnityECSEntityBuilder) and will not run without it.
 
 # Usage
 
@@ -87,7 +87,7 @@ ServerGameSimulationSystemGroup
 ## Command builders
 
 For making your life easier, there are command builders for both client & server commands.
-First of all, you have to create an (IRpcCommand)[https://docs.unity3d.com/Packages/com.unity.netcode@0.1/manual/getting-started.html] yourself.
+First of all, you have to create an [IRpcCommand](https://docs.unity3d.com/Packages/com.unity.netcode@0.1/manual/getting-started.html) yourself.
 
 ### Client-side
 
