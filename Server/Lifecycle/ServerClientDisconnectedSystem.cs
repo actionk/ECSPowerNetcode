@@ -15,7 +15,7 @@ namespace Plugins.ECSPowerNetcode.Server.Lifecycle
                 .ForEach((Entity entity, ref NetworkIdComponent networkIdComponent, ref CommandTargetComponent commandTargetComponent) =>
                 {
                     PostUpdateCommands.DestroyEntity(commandTargetComponent.targetEntity);
-                    ServerManager.Instance.OnDisconnected(entity);
+                    ServerManager.Instance.OnDisconnected(networkIdComponent.Value);
 
                     UnityLogger.Info($"[Server] Client disconnected from server with network id = [{networkIdComponent.Value}]");
                 });

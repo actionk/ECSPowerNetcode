@@ -54,7 +54,7 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
             foreach (var connection in connections)
             {
                 var entity = base.Build(wrapper);
-                wrapper.AddComponentData(entity, new SendRpcCommandRequestComponent {TargetConnection = connection});
+                wrapper.AddComponentData(entity, new SendRpcCommandRequestComponent {TargetConnection = connection.connectionEntity});
             }
 
             return Entity.Null;
