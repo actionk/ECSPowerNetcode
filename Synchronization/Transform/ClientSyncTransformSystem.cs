@@ -1,5 +1,5 @@
 using Plugins.ECSPowerNetcode.Client;
-using Plugins.UnityExtras.Logs;
+using Plugins.ECSPowerNetcode.Client.Groups;
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Transforms;
@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Synchronization.Transform
 {
-    [UpdateInGroup(typeof(ClientSimulationSystemGroup))]
+    [UpdateInGroup(typeof(ClientRequestProcessingSystemGroup))]
     public class ClientSyncTransformSystem : ComponentSystem
     {
         protected override void OnUpdate()
