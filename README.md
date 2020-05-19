@@ -9,6 +9,10 @@ You can either just put the files into `Assets/Plugins/ECSEntityBuilder` or use 
 git submodule add https://github.com/actionk/ECSPowerNetcode.git Assets/Plugins/ECSPowerNetcode
 ```
 
+## Dependencies
+
+The library depends on (UnityECSEntityBuilder)[https://github.com/actionk/UnityECSEntityBuilder] and will not run without it.
+
 # Usage
 
 ## Starting a server and connecting to it locally
@@ -83,4 +87,43 @@ ServerGameSimulationSystemGroup
 ## Command builders
 
 For making your life easier, there are command builders for both client & server commands.
-First of all, you have to create an IRpcCommand yourserlf
+First of all, you have to create an (IRpcCommand)[https://docs.unity3d.com/Packages/com.unity.netcode@0.1/manual/getting-started.html] yourself.
+
+### Client-side
+
+```
+ClientToServerRpcCommandBuilder
+    .Send(new ClientPlayerLoginCommand {localPlayerSide = PlayerManager.LocalPlayerSide.LEFT})
+    .Build(PostUpdateCommands);
+```
+
+Where `ClientPlayerLoginCommand` implements `IRpcCommand`
+
+### Server-side
+
+
+You can specify which client to send the command to:
+
+```
+ServerToClientRpcCommandBuilder
+    .SendTo(clientConnectionEntity, command)
+    .Build(PostUpdateCommands);
+    
+ServerToClientRpcCommandBuilder
+    .SendTo(networkId, command)
+    .Build(PostUpdateCommands);
+```
+
+Or you can simply broadcast:
+
+```
+ServerToClientRpcCommandBuilder
+    .Broadcast(command)
+    .Build(PostUpdateCommands);
+```
+
+## Synchronizing entities
+
+Usually your way of organizing entities in client-server architecture with ECS would look like that:
+
+[Organizing entities](.static/organizing_entities.png)
