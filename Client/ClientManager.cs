@@ -10,24 +10,21 @@ namespace Plugins.ECSPowerNetcode.Client
 {
     public class ClientManager : ANetworkEntityManager
     {
-        public Entity ConnectionEntity { get; private set; }
-        public Entity CommandHandlerEntity { get; private set; }
-        public int ConnectionNetworkId { get; private set; } = -1;
+        public ConnectionDescription ConnectionToServer { get; private set; }
         public bool IsConnected { get; private set; }
 
         public void OnConnectionEstablished(Entity connectionEntity, Entity commandHandlerEntity, int networkId)
         {
-            ConnectionEntity = connectionEntity;
-            CommandHandlerEntity = commandHandlerEntity;
-            ConnectionNetworkId = networkId;
+            var connectionToServer = ConnectionToServer;
+            connectionToServer.connectionEntity = connectionEntity;
+            connectionToServer.commandHandlerEntity = commandHandlerEntity;
+            connectionToServer.networkId = networkId;
+            ConnectionToServer = connectionToServer;
             IsConnected = true;
         }
 
         public void OnDisconnected()
         {
-            ConnectionEntity = Entity.Null;
-            CommandHandlerEntity = Entity.Null;
-            ConnectionNetworkId = -1;
             IsConnected = false;
         }
 
@@ -45,10 +42,10 @@ namespace Plugins.ECSPowerNetcode.Client
 
         public void Disconnect()
         {
-            if (ConnectionEntity == Entity.Null)
+            if (!IsConnected)
                 return;
 
-            WorldManager.Instance.Client.EntityManager.AddComponent<NetworkStreamRequestDisconnect>(ConnectionEntity);
+            WorldManager.Instance.Client.EntityManager.AddComponent<NetworkStreamRequestDisconnect>(ConnectionToServer.connectionEntity);
         }
 
         #region Singleton

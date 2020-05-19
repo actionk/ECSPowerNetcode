@@ -11,7 +11,7 @@ namespace Plugins.ECSPowerNetcode.Client.Packets
         {
             return new ClientToServerRpcCommandBuilder()
                 .AddComponentData(command)
-                .AddComponentData(new SendRpcCommandRequestComponent {TargetConnection = ClientManager.Instance.ConnectionEntity})
+                .AddComponentData(new SendRpcCommandRequestComponent {TargetConnection = ClientManager.Instance.ConnectionToServer.connectionEntity})
                 .SetName($"RpcCommand {typeof(T).Name}");
         }
     }

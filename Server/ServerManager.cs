@@ -11,21 +11,14 @@ namespace Plugins.ECSPowerNetcode.Server
 {
     public class ServerManager : ANetworkEntityManager
     {
-        public struct ClientConnection
-        {
-            public int networkId;
-            public Entity connectionEntity;
-            public Entity commandHandlerEntity;
-        }
-
         private ulong nextEntityId = 1;
         public ulong NextNetworkEntityId => nextEntityId++;
 
-        private readonly Dictionary<int, ClientConnection> m_openedConnections = new Dictionary<int, ClientConnection>();
+        private readonly Dictionary<int, ConnectionDescription> m_openedConnections = new Dictionary<int, ConnectionDescription>();
 
         public void OnConnected(int networkId, Entity connectionEntity, Entity commandHandlerEntity)
         {
-            m_openedConnections[networkId] = new ClientConnection
+            m_openedConnections[networkId] = new ConnectionDescription
             {
                 networkId = networkId,
                 connectionEntity = connectionEntity,
@@ -38,7 +31,7 @@ namespace Plugins.ECSPowerNetcode.Server
             m_openedConnections.Remove(networkId);
         }
 
-        public ClientConnection GetClientConnectionByNetworkId(int networkId)
+        public ConnectionDescription GetClientConnectionByNetworkId(int networkId)
         {
             return m_openedConnections[networkId];
         }
@@ -53,7 +46,7 @@ namespace Plugins.ECSPowerNetcode.Server
             serverWorld.EntityManager.AddComponentData(startServerEntity, new StartServer {port = port});
         }
 
-        public List<ClientConnection> AllConnections => m_openedConnections.Values.ToList();
+        public List<ConnectionDescription> AllConnections => m_openedConnections.Values.ToList();
 
         #region Singleton
 
