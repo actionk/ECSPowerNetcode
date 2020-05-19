@@ -352,7 +352,11 @@ namespace Entities.Players.Packets
 }
 ```
 
-This way when you add a `Velocity` component to an entity which also has `NetworkEntity` component, the `Velocity` component will be automatically synchronized on every change.
+This way when you add a `Velocity` component to an entity which also has `NetworkEntity` component, the `Velocity` component will be automatically synchronized.
+
+## Triggering synchronization
+
+For triggering synchronization process for all the components on the entities, add `Synchronize` component to the entity.
 
 ## Transform synchronization
 
