@@ -1,8 +1,8 @@
 using Plugins.ECSPowerNetcode.Server.Groups;
 using Plugins.ECSPowerNetcode.Shared;
-using Plugins.UnityExtras.Logs;
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.NetCode;
@@ -16,6 +16,7 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Transform
         private RpcQueue<SyncTransformFromServerToClientCommand> m_rpcQueue;
         private EntityQuery m_updatedComponentsQuery;
         private EntityQuery m_connectionsQuery;
+        private EndSimulationEntityCommandBufferSystem m_entityCommandBufferSource;
 
         protected override void OnCreate()
         {
@@ -27,18 +28,28 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Transform
                 {
                     ComponentType.ReadOnly<NetworkEntity>(),
                     ComponentType.ReadOnly<SyncTransformFromServerToClient>(),
+                    ComponentType.ReadOnly<Synchronize>(),
                     ComponentType.ReadOnly<Translation>(),
                     ComponentType.ReadOnly<Rotation>(),
                     ComponentType.ReadOnly<Scale>()
                 }
             });
             m_connectionsQuery = GetEntityQuery(ComponentType.ReadOnly<OutgoingRpcDataStreamBufferComponent>());
+            m_entityCommandBufferSource = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
 
         [BurstCompile]
         struct UpdateJob : IJobChunk
         {
+            [NativeSetThreadIndex]
+            internal int m_nativeThreadIndex;
+
+            public EntityCommandBuffer.Concurrent CommandBuffer;
+
+            [ReadOnly]
+            public ArchetypeChunkEntityType Entities;
+
             [ReadOnly]
             public ArchetypeChunkComponentType<NetworkEntity> NetworkEntity;
 
@@ -51,22 +62,11 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Transform
             [ReadOnly]
             public ArchetypeChunkComponentType<Scale> ScaleType;
 
-            public uint LastSystemVersion;
-
             public NativeQueue<SyncTransformFromServerToClientCommand>.ParallelWriter Commands;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
-                bool changed =
-                    chunk.DidOrderChange(LastSystemVersion) ||
-                    chunk.DidChange(TranslationType, LastSystemVersion) ||
-                    chunk.DidChange(ScaleType, LastSystemVersion) ||
-                    chunk.DidChange(RotationType, LastSystemVersion);
-                if (!changed)
-                {
-                    return;
-                }
-
+                var chunkEntities = chunk.GetNativeArray(Entities);
                 var chunkNetworkEntities = chunk.GetNativeArray(NetworkEntity);
                 var chunkTranslations = chunk.GetNativeArray(TranslationType);
                 var chunkRotation = chunk.GetNativeArray(RotationType);
@@ -83,6 +83,8 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Transform
                         scale = chunkScale[i].Value
                     };
                     Commands.Enqueue(command);
+
+                    CommandBuffer.RemoveComponent<Synchronize>(m_nativeThreadIndex, chunkEntities[i]);
                 }
             }
         }
@@ -118,15 +120,17 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Transform
             var commandsToSend = new NativeQueue<SyncTransformFromServerToClientCommand>(Allocator.TempJob);
             var updateJob = new UpdateJob
             {
+                CommandBuffer = m_entityCommandBufferSource.CreateCommandBuffer().ToConcurrent(),
+                Entities = GetArchetypeChunkEntityType(),
                 NetworkEntity = GetArchetypeChunkComponentType<NetworkEntity>(true),
                 TranslationType = GetArchetypeChunkComponentType<Translation>(true),
                 RotationType = GetArchetypeChunkComponentType<Rotation>(true),
                 ScaleType = GetArchetypeChunkComponentType<Scale>(true),
-                Commands = commandsToSend.AsParallelWriter(),
-                LastSystemVersion = LastSystemVersion
+                Commands = commandsToSend.AsParallelWriter()
             };
 
             var updateJobDependency = updateJob.Schedule(m_updatedComponentsQuery, inputDeps);
+            m_entityCommandBufferSource.AddJobHandleForProducer(updateJobDependency);
 
             var sendJob = new SendJob
             {

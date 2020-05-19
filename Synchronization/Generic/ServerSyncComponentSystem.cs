@@ -2,6 +2,7 @@ using Plugins.ECSPowerNetcode.Server.Groups;
 using Plugins.ECSPowerNetcode.Shared;
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.NetCode;
@@ -16,20 +17,39 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Generic
         private RpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>> m_rpcQueue;
         private EntityQuery m_updatedComponentsQuery;
         private EntityQuery m_connectionsQuery;
+        private EndSimulationEntityCommandBufferSystem m_EntityCommandBufferSource;
 
         protected override void OnCreate()
         {
             m_rpcQueue = World.GetExistingSystem<RpcSystem>().GetRpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>>();
 
-            m_updatedComponentsQuery = GetEntityQuery(ComponentType.ReadOnly<NetworkEntity>(), ComponentType.ReadOnly<TComponent>());
-            m_updatedComponentsQuery.SetChangedVersionFilter(typeof(TComponent));
+            m_updatedComponentsQuery = GetEntityQuery(
+                new EntityQueryDesc
+                {
+                    All = new[]
+                    {
+                        ComponentType.ReadOnly<NetworkEntity>(),
+                        ComponentType.ReadOnly<Synchronize>(),
+                        ComponentType.ReadOnly<TComponent>()
+                    }
+                }
+            );
 
             m_connectionsQuery = GetEntityQuery(ComponentType.ReadOnly<OutgoingRpcDataStreamBufferComponent>());
+            m_EntityCommandBufferSource = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
         [BurstCompile]
         struct UpdateJob : IJobChunk
         {
+            [NativeSetThreadIndex]
+            internal int m_nativeThreadIndex;
+
+            public EntityCommandBuffer.Concurrent CommandBuffer;
+
+            [ReadOnly]
+            public ArchetypeChunkEntityType Entities;
+
             [ReadOnly]
             public ArchetypeChunkComponentType<NetworkEntity> NetworkEntity;
 
@@ -40,6 +60,7 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Generic
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
+                var chunkEntities = chunk.GetNativeArray(Entities);
                 var chunkNetworkEntities = chunk.GetNativeArray(NetworkEntity);
                 var chunkComponents = chunk.GetNativeArray(Component);
                 var count = chunk.Count;
@@ -55,6 +76,8 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Generic
                         component = converter
                     };
                     Commands.Enqueue(copyEntityComponentRpcCommand);
+
+                    CommandBuffer.RemoveComponent<Synchronize>(m_nativeThreadIndex, chunkEntities[i]);
                 }
             }
         }
@@ -90,12 +113,15 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Generic
             var commandsToSend = new NativeQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>>(Allocator.TempJob);
             var updateJob = new UpdateJob
             {
+                CommandBuffer = m_EntityCommandBufferSource.CreateCommandBuffer().ToConcurrent(),
+                Entities = GetArchetypeChunkEntityType(),
                 NetworkEntity = GetArchetypeChunkComponentType<NetworkEntity>(true),
                 Component = GetArchetypeChunkComponentType<TComponent>(true),
                 Commands = commandsToSend.AsParallelWriter()
             };
-
             var updateJobDependency = updateJob.Schedule(m_updatedComponentsQuery, inputDeps);
+
+            m_EntityCommandBufferSource.AddJobHandleForProducer(updateJobDependency);
 
             var sendJob = new SendJob
             {
