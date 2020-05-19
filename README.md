@@ -288,3 +288,74 @@ You have two possibilities of controlling that:
 EntityWrapper.Wrap(entity, EntityManager)
     .AddElementToBuffer(new TransferNetworkEntityToClient(reqSrcSourceConnection));
 ```
+
+# Components synchronization
+
+As an alternatives to Unity Netcode's Ghosts, the lib provides a way of synchronizing components automatically from server to all clients.
+
+Here is the example:
+
+```cs
+[assembly: RegisterGenericComponentType(typeof(CopyEntityComponentRpcCommand<Velocity, VelocityConverter>))]
+
+namespace Entities.Players.Packets
+{
+    public struct Velocity : IComponentData
+    {
+        public float3 value;
+
+        public bool IsZero => math.lengthsq(value) <= 0.001f;
+    }
+
+    public struct VelocityConverter : ISyncEntityConverter<Velocity>
+    {
+        public Velocity velocity;
+        public Velocity Value => velocity;
+
+        public void Convert(Velocity value)
+        {
+            velocity = value;
+        }
+
+        public void Serialize(ref DataStreamWriter writer)
+        {
+            writer.WriteFloat(velocity.value.x);
+            writer.WriteFloat(velocity.value.y);
+            writer.WriteFloat(velocity.value.z);
+        }
+
+        public void Deserialize(ref DataStreamReader reader)
+        {
+            velocity.value = new float3(
+                reader.ReadFloat(),
+                reader.ReadFloat(),
+                reader.ReadFloat()
+            );
+        }
+    }
+
+    public class VelocityRpcCommandSender : RpcCommandRequestSystem<CopyEntityComponentRpcCommand<Velocity, VelocityConverter>>
+    {
+    }
+
+    public class VelocityServerSyncSystem : ServerSyncComponentSystem<Velocity, VelocityConverter>
+    {
+    }
+
+    public class VelocityClientSyncSystem : ClientSyncComponentSystem<Velocity, VelocityConverter>
+    {
+        protected override bool ShouldApply(Entity entity, ref CopyEntityComponentRpcCommand<Velocity, VelocityConverter> command)
+        {
+            return !EntityManager.HasComponent<LocalPlayer>(entity);
+        }
+    }
+}
+```
+
+This way when you add a `Velocity` component to an entity which also has `NetworkEntity` component, the `Velocity` component will be automatically synchronized on every change.
+
+## Transform synchronization
+
+You can also synchronize all transform components in one command by just adding `SyncTransformFromServerToClient` to any entity in server world which has `NetworkEntity` component as well.
+
+If you don't want to recieve such updates on the client side (for example, when you're controlling your character, you don't want to receive updates about his/her position), you can just add `IgnoreTransformCopyingFromServer` component to this entity in client world.
