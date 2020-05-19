@@ -26,7 +26,7 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Generic
 
             m_connectionsQuery = GetEntityQuery(ComponentType.ReadOnly<OutgoingRpcDataStreamBufferComponent>());
         }
-        
+
         [BurstCompile]
         struct UpdateJob : IJobChunk
         {

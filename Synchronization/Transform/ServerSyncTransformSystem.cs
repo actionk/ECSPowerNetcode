@@ -1,5 +1,6 @@
 using Plugins.ECSPowerNetcode.Server.Groups;
 using Plugins.ECSPowerNetcode.Shared;
+using Plugins.UnityExtras.Logs;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -10,7 +11,7 @@ using Unity.Transforms;
 namespace Plugins.ECSPowerNetcode.Synchronization.Transform
 {
     [UpdateInGroup(typeof(ServerNetworkEntitySystemGroup))]
-    public abstract class ServerSyncTransformSystem : JobComponentSystem
+    public class ServerSyncTransformSystem : JobComponentSystem
     {
         private RpcQueue<SyncTransformFromServerToClientCommand> m_rpcQueue;
         private EntityQuery m_updatedComponentsQuery;
@@ -20,12 +21,17 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Transform
         {
             m_rpcQueue = World.GetExistingSystem<RpcSystem>().GetRpcQueue<SyncTransformFromServerToClientCommand>();
 
-            m_updatedComponentsQuery = GetEntityQuery(
-                ComponentType.ReadOnly<NetworkEntity>(),
-                ComponentType.ReadOnly<Translation>(),
-                ComponentType.ReadOnly<Rotation>(),
-                ComponentType.ReadOnly<Scale>()
-            );
+            m_updatedComponentsQuery = GetEntityQuery(new EntityQueryDesc
+            {
+                All = new[]
+                {
+                    ComponentType.ReadOnly<NetworkEntity>(),
+                    ComponentType.ReadOnly<SyncTransformFromServerToClient>(),
+                    ComponentType.ReadOnly<Translation>(),
+                    ComponentType.ReadOnly<Rotation>(),
+                    ComponentType.ReadOnly<Scale>()
+                }
+            });
             m_connectionsQuery = GetEntityQuery(ComponentType.ReadOnly<OutgoingRpcDataStreamBufferComponent>());
         }
 

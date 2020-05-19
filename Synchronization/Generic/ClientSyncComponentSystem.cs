@@ -3,6 +3,7 @@ using Plugins.ECSPowerNetcode.Client.Groups;
 using Plugins.UnityExtras.Logs;
 using Unity.Entities;
 using Unity.NetCode;
+using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Synchronization.Generic
 {
@@ -24,16 +25,16 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Generic
                     var networkEntity = ClientManager.Instance.GetEntityByNetworkEntityId(command.networkEntityId);
                     if (networkEntity == Entity.Null)
                     {
-                        UnityLogger.Warning($"Entity with networkEntityId {command.networkEntityId} doesn't exist");
+                        Debug.LogWarning($"Entity with networkEntityId {command.networkEntityId} doesn't exist");
                         return;
                     }
+
+                    PostUpdateCommands.DestroyEntity(entity);
 
                     if (!ShouldApply(networkEntity, ref command))
                         return;
 
-                    UnityLogger.Log($"Updated! {command.component.Value}");
                     PostUpdateCommands.SetComponent(networkEntity, command.component.Value);
-                    PostUpdateCommands.DestroyEntity(entity);
                 });
         }
     }

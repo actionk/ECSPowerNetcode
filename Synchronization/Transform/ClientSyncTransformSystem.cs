@@ -3,6 +3,7 @@ using Plugins.UnityExtras.Logs;
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Synchronization.Transform
 {
@@ -17,7 +18,7 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Transform
                     var modifiedEntity = ClientManager.Instance.GetEntityByNetworkEntityId(snapshot.networkEntityId);
                     if (modifiedEntity == Entity.Null)
                     {
-                        UnityLogger.Warning($"Entity with networkEntityId {snapshot.networkEntityId} doesn't exist");
+                        Debug.LogWarning($"Entity with networkEntityId {snapshot.networkEntityId} doesn't exist");
                         return;
                     }
 
