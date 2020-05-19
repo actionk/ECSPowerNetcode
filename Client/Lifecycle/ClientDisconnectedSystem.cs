@@ -2,6 +2,7 @@ using Plugins.ECSPowerNetcode.Client.Groups;
 using Plugins.UnityExtras.Logs;
 using Unity.Entities;
 using Unity.NetCode;
+using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Client.Lifecycle
 {
@@ -17,7 +18,7 @@ namespace Plugins.ECSPowerNetcode.Client.Lifecycle
                     PostUpdateCommands.DestroyEntity(commandTargetComponent.targetEntity);
                     ClientManager.Instance.OnDisconnected();
 
-                    UnityLogger.Info($"[Client] Disconnected from server");
+                    Debug.Log($"[Client] Disconnected from server");
                 });
         }
     }

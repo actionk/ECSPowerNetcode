@@ -4,6 +4,7 @@ using Plugins.UnityExtras.Logs;
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Networking.Transport;
+using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Server.Lifecycle
 {
@@ -24,7 +25,8 @@ namespace Plugins.ECSPowerNetcode.Server.Lifecycle
             NetworkEndPoint ep = NetworkEndPoint.AnyIpv4;
             ep.Port = startServer.port;
             network.Listen(ep);
-            UnityLogger.Info($"Server started on {ep.Port} port in {World.Name} world");
+            
+            Debug.Log($"Server started on {ep.Port} port in {World.Name} world");
         }
     }
 }

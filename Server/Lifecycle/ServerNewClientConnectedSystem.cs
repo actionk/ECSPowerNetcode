@@ -3,6 +3,7 @@ using Plugins.ECSPowerNetcode.Server.Groups;
 using Plugins.UnityExtras.Logs;
 using Unity.Entities;
 using Unity.NetCode;
+using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Server.Lifecycle
 {
@@ -17,7 +18,7 @@ namespace Plugins.ECSPowerNetcode.Server.Lifecycle
                 .WithNone<NetworkStreamInGame>()
                 .ForEach((Entity connectionEntity, ref NetworkIdComponent networkIdComponent) =>
                 {
-                    UnityLogger.Info($"[Server] Client connected with network id = [{networkIdComponent.Value}]");
+                    Debug.Log($"[Server] Client connected with network id = [{networkIdComponent.Value}]");
 
                     var connectionCommandHandler = EntityManager.CreateEntity();
                     PostUpdateCommands.AddComponent<ServerToClientCommandHandler>(connectionCommandHandler);
