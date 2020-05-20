@@ -22,14 +22,14 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Transform
                         return;
                     }
 
+                    PostUpdateCommands.DestroyEntity(entity);
+
                     if (EntityManager.HasComponent<IgnoreTransformCopyingFromServer>(modifiedEntity))
                         return;
 
                     PostUpdateCommands.SetComponent(modifiedEntity, new Translation {Value = snapshot.position});
                     PostUpdateCommands.SetComponent(modifiedEntity, new Rotation {Value = snapshot.rotation});
                     PostUpdateCommands.SetComponent(modifiedEntity, new Scale {Value = snapshot.scale});
-
-                    PostUpdateCommands.DestroyEntity(entity);
                 });
         }
     }
