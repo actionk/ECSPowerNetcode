@@ -22,11 +22,10 @@ namespace Plugins.ECSPowerNetcode.Synchronization.Transform
                         return;
                     }
 
+                    PostUpdateCommands.DestroyEntity(entity);
 
                     if (EntityManager.HasComponent<IgnoreTransformCopyingFromServer>(modifiedEntity))
                         return;
-
-                    PostUpdateCommands.DestroyEntity(entity);
 
                     PostUpdateCommands.SetComponent(modifiedEntity, new Translation {Value = snapshot.position});
                     PostUpdateCommands.SetComponent(modifiedEntity, new Rotation {Value = snapshot.rotation});
