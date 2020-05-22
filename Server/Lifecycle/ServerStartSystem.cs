@@ -26,7 +26,7 @@ namespace Plugins.ECSPowerNetcode.Server.Lifecycle
             ep.Port = startServer.port;
             network.Listen(ep);
             
-            Debug.Log($"Server started on {ep.Port} port in {World.Name} world");
+            Debug.Log($"[Server] Started on {ep.Port} port in {World.Name} world");
         }
     }
 }
