@@ -1,5 +1,6 @@
 using System;
 using Plugins.ECSEntityBuilder;
+using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Shared;
 
 namespace Plugins.ECSPowerNetcode.Client.Entities

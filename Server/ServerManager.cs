@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.ECSEntityBuilder.Worlds;
+using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Server.Components;
 using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;

@@ -1,4 +1,5 @@
 using Plugins.ECSPowerNetcode.Client.Groups;
+using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 

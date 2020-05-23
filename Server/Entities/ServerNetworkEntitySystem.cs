@@ -1,3 +1,4 @@
+using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Server.Components;
 using Plugins.ECSPowerNetcode.Server.Groups;
 using Plugins.ECSPowerNetcode.Shared;

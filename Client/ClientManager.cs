@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Plugins.ECSEntityBuilder.Worlds;
 using Plugins.ECSPowerNetcode.Client.Components;
+using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Shared;
+using Plugins.ECSPowerNetcode.Utils;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
@@ -10,8 +13,12 @@ namespace Plugins.ECSPowerNetcode.Client
 {
     public class ClientManager : ANetworkEntityManager
     {
+        private readonly MultiValueDictionary<ulong, Entity> m_entitiesWaitingForManagedRpcCommandResult = new MultiValueDictionary<ulong, Entity>();
+        private ulong m_currentManagedPacketId = 1;
+
         public ConnectionDescription ConnectionToServer { get; private set; }
         public bool IsConnected { get; private set; }
+        public ulong NextManagedPacketId => m_currentManagedPacketId++;
 
         public void OnConnectionEstablished(Entity connectionEntity, Entity commandHandlerEntity, int networkId)
         {
@@ -46,6 +53,22 @@ namespace Plugins.ECSPowerNetcode.Client
                 return;
 
             WorldManager.Instance.Client.EntityManager.AddComponent<NetworkStreamRequestDisconnect>(ConnectionToServer.connectionEntity);
+        }
+
+        public void AddEntityWaitingForManagedRpcCommandResult(Entity entity, ulong packetId)
+        {
+            m_entitiesWaitingForManagedRpcCommandResult.Add(packetId, entity);
+        }
+
+        public HashSet<Entity> GetEntitiesWaitingForManagedPacket(ulong commandPacketId)
+        {
+            if (m_entitiesWaitingForManagedRpcCommandResult.TryGetValue(commandPacketId, out var result))
+            {
+                m_entitiesWaitingForManagedRpcCommandResult.Remove(commandPacketId);
+                return result;
+            }
+
+            return null;
         }
 
         #region Singleton
