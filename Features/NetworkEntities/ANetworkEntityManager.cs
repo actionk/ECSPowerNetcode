@@ -13,6 +13,11 @@ namespace Plugins.ECSPowerNetcode.Features.NetworkEntities
             m_entities[networkEntityId] = entity;
         }
 
+        public void Remove(ulong networkEntityId)
+        {
+            m_entities.Remove(networkEntityId);
+        }
+
         public Entity GetEntityByNetworkEntityId(ulong networkEntityId)
         {
             return m_entities.GetValueOrDefault(networkEntityId, Entity.Null);

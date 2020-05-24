@@ -1,7 +1,6 @@
 using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Server.Components;
 using Plugins.ECSPowerNetcode.Server.Groups;
-using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 
 namespace Plugins.ECSPowerNetcode.Server.Entities
@@ -18,8 +17,17 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 {
                     ServerManager.Instance.Register(networkEntity.networkEntityId, entity);
 
-                    PostUpdateCommands.AddComponent<NetworkEntityRegistered>(entity);
+                    PostUpdateCommands.AddComponent(entity, new NetworkEntityRegistered {networkEntityId = networkEntity.networkEntityId});
                     PostUpdateCommands.AddComponent<TransferNetworkEntityToAllClients>(entity);
+                });
+
+            Entities
+                .WithAll<NetworkEntityRegistered>()
+                .WithNone<NetworkEntity>()
+                .ForEach((Entity entity, ref NetworkEntityRegistered networkEntity) =>
+                {
+                    ServerManager.Instance.Remove(networkEntity.networkEntityId);
+                    PostUpdateCommands.RemoveComponent<NetworkEntityRegistered>(entity);
                 });
         }
     }
