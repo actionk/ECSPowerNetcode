@@ -37,7 +37,7 @@ namespace Plugins.ECSPowerNetcode.Client
 
         public void ConnectToServer(ushort port)
         {
-            var clientWorld = WorldManager.Instance.Client;
+            var clientWorld = EntityWorldManager.Instance.Client;
             if (!clientWorld.IsCreated)
                 throw new NotImplementedException("Client world doesn't exist!");
 
@@ -52,7 +52,7 @@ namespace Plugins.ECSPowerNetcode.Client
             if (!IsConnected)
                 return;
 
-            WorldManager.Instance.Client.EntityManager.AddComponent<NetworkStreamRequestDisconnect>(ConnectionToServer.connectionEntity);
+            EntityWorldManager.Instance.Client.EntityManager.AddComponent<NetworkStreamRequestDisconnect>(ConnectionToServer.connectionEntity);
         }
 
         public void AddEntityWaitingForManagedRpcCommandResult(Entity entity, ulong packetId)

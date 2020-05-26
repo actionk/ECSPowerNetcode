@@ -39,7 +39,7 @@ namespace Plugins.ECSPowerNetcode.Server
 
         public void StartServer(ushort port)
         {
-            var serverWorld = WorldManager.Instance.Server;
+            var serverWorld = EntityWorldManager.Instance.Server;
             if (!serverWorld.IsCreated)
                 throw new NotImplementedException("Server world doesn't exist!");
 
