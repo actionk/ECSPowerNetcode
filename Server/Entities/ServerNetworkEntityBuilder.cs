@@ -6,9 +6,14 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
 {
     public abstract class ServerNetworkEntityBuilder<T> : EntityBuilder<T> where T : EntityBuilder<T>
     {
-        protected override void OnPreBuild(EntityManagerWrapper wrapper)
+        protected ServerNetworkEntityBuilder()
         {
             var networkEntityId = ServerManager.Instance.NextNetworkEntityId;
+            AddComponentData(new NetworkEntity {networkEntityId = networkEntityId});
+        }
+
+        protected ServerNetworkEntityBuilder(ulong networkEntityId)
+        {
             AddComponentData(new NetworkEntity {networkEntityId = networkEntityId});
         }
     }

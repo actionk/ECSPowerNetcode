@@ -4,6 +4,7 @@ using System.Linq;
 using Plugins.ECSEntityBuilder.Worlds;
 using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Server.Components;
+using Plugins.ECSPowerNetcode.Server.Entities;
 using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 using UnityEngine;
@@ -12,8 +13,15 @@ namespace Plugins.ECSPowerNetcode.Server
 {
     public class ServerManager : ANetworkEntityManager
     {
-        private ulong nextEntityId = 1;
-        public ulong NextNetworkEntityId => nextEntityId++;
+        public delegate void OnPlayerConnected(int networkId, Entity connectionEntity, Entity commandHandlerEntity);
+
+        public delegate void OnPlayerDisconnected(int networkId);
+
+        public event OnPlayerConnected OnPlayerConnectedHandler;
+        public event OnPlayerDisconnected OnPlayerDisconnectedHandler;
+
+        public INetworkEntityIdFactory NetworkEntityIdFactory { get; set; } = new DefaultNetworkEntityIdFactory();
+        public ulong NextNetworkEntityId => NetworkEntityIdFactory.NextId();
 
         private readonly Dictionary<int, ConnectionDescription> m_openedConnections = new Dictionary<int, ConnectionDescription>();
 
@@ -25,11 +33,13 @@ namespace Plugins.ECSPowerNetcode.Server
                 connectionEntity = connectionEntity,
                 commandHandlerEntity = commandHandlerEntity
             };
+            OnPlayerConnectedHandler?.Invoke(networkId, connectionEntity, commandHandlerEntity);
         }
 
         public void OnDisconnected(int networkId)
         {
             m_openedConnections.Remove(networkId);
+            OnPlayerDisconnectedHandler?.Invoke(networkId);
         }
 
         public ConnectionDescription GetClientConnectionByNetworkId(int networkId)
