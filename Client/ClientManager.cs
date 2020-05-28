@@ -19,6 +19,8 @@ namespace Plugins.ECSPowerNetcode.Client
         public ConnectionDescription ConnectionToServer { get; private set; }
         public bool IsConnected { get; private set; }
         public ulong NextManagedPacketId => m_currentManagedPacketId++;
+        
+        public uint ServerTick => EntityWorldManager.Instance.ClientTick;
 
         public void OnConnectionEstablished(Entity connectionEntity, Entity commandHandlerEntity, int networkId)
         {
@@ -35,7 +37,7 @@ namespace Plugins.ECSPowerNetcode.Client
             IsConnected = false;
         }
 
-        public void ConnectToServer(ushort port)
+        public void ConnectToServer(ushort port, string host = "127.0.0.1")
         {
             var clientWorld = EntityWorldManager.Instance.Client;
             if (!clientWorld.IsCreated)
@@ -44,7 +46,7 @@ namespace Plugins.ECSPowerNetcode.Client
             Disconnect();
 
             var connectToServer = clientWorld.EntityManager.CreateEntity();
-            clientWorld.EntityManager.AddComponentData(connectToServer, new ConnectToServer {port = port});
+            clientWorld.EntityManager.AddComponentData(connectToServer, new ConnectToServer {port = port, host = host});
         }
 
         public void Disconnect()

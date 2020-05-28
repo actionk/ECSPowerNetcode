@@ -1,5 +1,8 @@
+using System;
+using System.Net;
 using Plugins.ECSPowerNetcode.Client.Components;
 using Plugins.ECSPowerNetcode.Client.Groups;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Networking.Transport;
@@ -24,6 +27,9 @@ namespace Plugins.ECSPowerNetcode.Client.Lifecycle
 
             NetworkEndPoint ep = NetworkEndPoint.LoopbackIpv4;
             ep.Port = connectToServer.port;
+
+            var address = IPAddress.Parse(connectToServer.host.ToString());
+            ep.SetRawAddressBytes(new NativeArray<byte>(address.GetAddressBytes(), Allocator.Temp));
 
             network.Connect(ep);
 
