@@ -15,7 +15,7 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 .WithNone<NetworkEntityRegistered>()
                 .ForEach((Entity entity, ref NetworkEntity networkEntity) =>
                 {
-                    ServerManager.Instance.Register(networkEntity.networkEntityId, entity);
+                    ServerManager.Instance.NetworkEntityManager.Add(networkEntity.networkEntityId, entity);
 
                     PostUpdateCommands.AddComponent(entity, new NetworkEntityRegistered {networkEntityId = networkEntity.networkEntityId});
                     PostUpdateCommands.AddComponent<TransferNetworkEntityToAllClients>(entity);
@@ -26,7 +26,7 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 .WithNone<NetworkEntity>()
                 .ForEach((Entity entity, ref NetworkEntityRegistered networkEntity) =>
                 {
-                    ServerManager.Instance.Remove(networkEntity.networkEntityId);
+                    ServerManager.Instance.NetworkEntityManager.Remove(networkEntity.networkEntityId);
                     PostUpdateCommands.RemoveComponent<NetworkEntityRegistered>(entity);
                 });
         }

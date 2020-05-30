@@ -16,7 +16,7 @@ namespace Plugins.ECSPowerNetcode.Client.Lifecycle
                 .ForEach((Entity entity, ref CommandTargetComponent commandTargetComponent) =>
                 {
                     PostUpdateCommands.DestroyEntity(commandTargetComponent.targetEntity);
-                    ClientManager.Instance.OnDisconnected();
+                    ClientManager.Instance.OnDisconnectedFromServer();
 
                     Debug.Log($"[Client] Disconnected from server");
                 });

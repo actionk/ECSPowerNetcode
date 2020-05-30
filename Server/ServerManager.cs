@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.ECSEntityBuilder.Worlds;
-using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Server.Components;
 using Plugins.ECSPowerNetcode.Server.Entities;
 using Plugins.ECSPowerNetcode.Shared;
@@ -11,7 +10,7 @@ using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Server
 {
-    public class ServerManager : ANetworkEntityManager
+    public class ServerManager
     {
         public delegate void OnPlayerConnected(int networkId, Entity connectionEntity, Entity commandHandlerEntity);
 
@@ -20,6 +19,7 @@ namespace Plugins.ECSPowerNetcode.Server
         public event OnPlayerConnected OnPlayerConnectedHandler;
         public event OnPlayerDisconnected OnPlayerDisconnectedHandler;
 
+        public INetworkEntityManager NetworkEntityManager { get; set; } = new DefaultNetworkEntityManager();
         public INetworkEntityIdFactory NetworkEntityIdFactory { get; set; } = new DefaultNetworkEntityIdFactory();
         public ulong NextNetworkEntityId => NetworkEntityIdFactory.NextId();
 

@@ -20,7 +20,7 @@ namespace Plugins.ECSPowerNetcode.Client.Entities
                 {
                     UnityLogger.Log($"[Client] Creating a client entity with id {command.NetworkEntityId}");
 
-                    var existingEntity = ClientManager.Instance.GetEntityByNetworkEntityId(command.NetworkEntityId);
+                    var existingEntity = ClientManager.Instance.NetworkEntityManager.GetEntityByNetworkEntityId(command.NetworkEntityId);
                     if (existingEntity != Entity.Null)
                         SynchronizeNetworkEntity(existingEntity, command);
                     else

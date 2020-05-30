@@ -27,7 +27,7 @@ namespace Plugins.ECSPowerNetcode.Client.Lifecycle
                         .SetName($"ServerConnection_{id.Value}_CommandHandler")
                         .Entity;
 
-                    ClientManager.Instance.OnConnectionEstablished(connectionEntity, commandHandler, id.Value);
+                    ClientManager.Instance.OnConnectedToServer(connectionEntity, commandHandler, id.Value);
 
                     PostUpdateCommands.SetComponent(connectionEntity, new CommandTargetComponent {targetEntity = commandHandler});
                     PostUpdateCommands.AddComponent<NetworkStreamInGame>(connectionEntity);

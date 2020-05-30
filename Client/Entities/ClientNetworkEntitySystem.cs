@@ -1,6 +1,5 @@
 using Plugins.ECSPowerNetcode.Client.Groups;
 using Plugins.ECSPowerNetcode.Features.NetworkEntities;
-using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 
 namespace Plugins.ECSPowerNetcode.Client.Entities
@@ -15,7 +14,7 @@ namespace Plugins.ECSPowerNetcode.Client.Entities
                 .WithNone<NetworkEntityRegistered>()
                 .ForEach((Entity entity, ref NetworkEntity networkEntity) =>
                 {
-                    ClientManager.Instance.Register(networkEntity.networkEntityId, entity);
+                    ClientManager.Instance.NetworkEntityManager.Add(networkEntity.networkEntityId, entity);
                     PostUpdateCommands.AddComponent(entity, new NetworkEntityRegistered {networkEntityId = networkEntity.networkEntityId});
                 });
 
@@ -24,7 +23,7 @@ namespace Plugins.ECSPowerNetcode.Client.Entities
                 .WithNone<NetworkEntity>()
                 .ForEach((Entity entity, ref NetworkEntityRegistered networkEntity) =>
                 {
-                    ClientManager.Instance.Remove(networkEntity.networkEntityId);
+                    ClientManager.Instance.NetworkEntityManager.Remove(networkEntity.networkEntityId);
                     PostUpdateCommands.RemoveComponent<NetworkEntityRegistered>(entity);
                 });
         }

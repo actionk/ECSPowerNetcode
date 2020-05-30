@@ -15,7 +15,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
             Entities
                 .ForEach((Entity entity, ref SyncTransformFromServerToClientCommand snapshot, ref ReceiveRpcCommandRequestComponent reqSrc) =>
                 {
-                    var modifiedEntity = ClientManager.Instance.GetEntityByNetworkEntityId(snapshot.networkEntityId);
+                    var modifiedEntity = ClientManager.Instance.NetworkEntityManager.GetEntityByNetworkEntityId(snapshot.networkEntityId);
                     if (modifiedEntity == Entity.Null)
                     {
                         Debug.LogWarning($"Entity with networkEntityId {snapshot.networkEntityId} doesn't exist");
