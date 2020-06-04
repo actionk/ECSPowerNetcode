@@ -25,6 +25,8 @@ namespace Plugins.ECSPowerNetcode.Shared
             return m_entities.Remove(networkEntityId);
         }
 
+        public Entity this[ulong networkEntityId] => GetEntityByNetworkEntityId(networkEntityId);
+
         public Dictionary<ulong, Entity> All => m_entities;
     }
 }

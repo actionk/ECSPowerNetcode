@@ -15,11 +15,11 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
                 .SetName($"RpcCommand {typeof(T).Name}");
         }
 
-        public static ServerToClientRpcCommandBuilder SendTo<T>(int networkId, T command) where T : struct, IRpcCommand
+        public static ServerToClientRpcCommandBuilder SendTo<T>(int networkConnectionId, T command) where T : struct, IRpcCommand
         {
-            var connection = ServerManager.Instance.GetClientConnectionByNetworkId(networkId);
+            var connection = ServerManager.Instance.GetClientConnectionByNetworkId(networkConnectionId);
             if (connection.IsEmpty)
-                throw new ClientConnectionNotFoundException($"No connection with network id [{networkId}] found");
+                throw new ClientConnectionNotFoundException($"No connection with network id [{networkConnectionId}] found");
 
             return new ServerToClientRpcCommandBuilder()
                 .AddComponentData(command)

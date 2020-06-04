@@ -12,9 +12,9 @@ namespace Plugins.ECSPowerNetcode.Server
 {
     public class ServerManager
     {
-        public delegate void OnPlayerConnected(int networkId, Entity connectionEntity, Entity commandHandlerEntity);
+        public delegate void OnPlayerConnected(int networkConnectionId, Entity connectionEntity, Entity commandHandlerEntity);
 
-        public delegate void OnPlayerDisconnected(int networkId);
+        public delegate void OnPlayerDisconnected(int networkConnectionId);
 
         public event OnPlayerConnected OnPlayerConnectedHandler;
         public event OnPlayerDisconnected OnPlayerDisconnectedHandler;
