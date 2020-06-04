@@ -14,6 +14,11 @@ The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packa
 * [Command builders](#command-builders)
 * [Command handlers](#command-handlers)
 * [Synchronizing entities](#synchronizing-entities)
+* * [Creating an entity on server side](#creating-an-entity-on-server-side)
+* * [Transferring the entity](#transferring-the-entity)
+* * [Creating the entity on the client side](#creating-the-entity-on-the-client-side)
+* * [Synchronizing the entity](#synchronizing-the-entity)
+* * [Destroying the entity](#destroying-the-entity)
 * [Synchronizing components](#synchronizing-components)
 * [Managed RPC commands](#managed-rpc-commands)
 
@@ -177,7 +182,7 @@ public class ServerDropItemSystem : AServerReceiveRpcCommandSystem<ClientDropIte
 }
 ```
 
-## Synchronizing entities
+# Synchronizing entities
 
 Usually your way of organizing entities in client-server architecture with ECS would look like that:
 
@@ -187,7 +192,7 @@ That's for, the library provides you with a way of synchronizing entities withou
 
 ![](./.static/synchronizing_entities.png)
 
-### Creating an entity on server side
+#### Creating an entity on server side
 
 You start with creating an entity builder by inheriting your builder from `ServerNetworkEntityBuilder`:
 
@@ -216,7 +221,7 @@ public class ServerPlayerBuilder : ServerNetworkEntityBuilder<ServerPlayerBuilde
 }
 ```
 
-### Transferring the entity
+#### Transferring the entity
 
 Then, you create an RPC command to send the entity to the clients:
 
@@ -306,7 +311,7 @@ public class ServerPlayerTransferSystem : AServerNetworkEntityTransferSystem<Ser
 }
 ```
 
-### Creating the entity on the client side
+#### Creating the entity on the client side
 
 And the system for consuming this command on the client side:
 
@@ -331,7 +336,7 @@ public class ClientPlayerTransferSystem : AClientNetworkEntityTransferSystem<Pla
 
 That's it! When you server entity is created, it will be automatically transferred to the client side by using `TransferNetworkEntityToAllClients`, which is described below
 
-### Manually control when you want your entity to be transferred to client
+#### Synchronizing the entity
 
 You have two possibilities of controlling that:
 
@@ -342,6 +347,14 @@ You have two possibilities of controlling that:
 ```cs
 EntityWrapper.Wrap(entity, EntityManager)
     .AddElementToBuffer(new TransferNetworkEntityToClient(reqSrcSourceConnection));
+```
+
+#### Destroying the entity
+
+When you want to destroy the entity on the server and all the clients at the same time, you can just add a `ServerDestroy` component to server entity and it will be automatically destroyed on all the clients:
+
+```cs
+PostUpdateCommands.AddComponent<ServerDestroy>(myServerEntity);
 ```
 
 # Synchronizing components
