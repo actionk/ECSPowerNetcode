@@ -5,7 +5,7 @@ The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packa
 # Table of Contents
 
 * [Install](#install)
-  * [Getting Start](#dependencies)
+  * [Dependencies](#dependencies)
 * [Getting started](#getting-started)
 * * [Starting a server and connecting to it locally](#starting-a-server-and-connecting-to-it-locally)
 * * [Connecting to a remote server](#connecting-to-a-remote-server)
