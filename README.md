@@ -2,7 +2,22 @@
 
 The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packages/com.unity.netcode@0.1/manual/index.html) package and saves you some time on configuring it / provides tools for client-server communication.
 
-## Install
+# Table of Contents
+
+* [Install](#install)
+  * [Getting Start](#dependencies)
+* [Getting started](#getting-started)
+* * [Starting a server and connecting to it locally](#starting-a-server-and-connecting-to-it-locally)
+* * [Connecting to a remote server](#connecting-to-a-remote-server)
+* * [Accessing connection's entities](#accessing-connections-entities)
+* [Groups](#groups)
+* [Command builders](#command-builders)
+* [Command handlers](#command-handlers)
+* [Synchronizing entities](#synchronizing-entities)
+* [Synchronizing components](#synchronizing-components)
+* [Managed RPC commands](#managed-rpc-commands)
+
+# Install
 
 You can either just put the files into `Assets/Plugins/ECSEntityBuilder` or use it as a submodule:
 ```sh
@@ -13,7 +28,7 @@ git submodule add https://github.com/actionk/ECSPowerNetcode.git Assets/Plugins/
 
 The library depends on [UnityECSEntityBuilder](https://github.com/actionk/UnityECSEntityBuilder) and will not run without it.
 
-# Usage
+# Getting started
 
 ## Starting a server and connecting to it locally
 
@@ -312,7 +327,7 @@ public class ClientPlayerTransferSystem : AClientNetworkEntityTransferSystem<Pla
 
 That's it! When you server entity is created, it will be automatically transferred to the client side by using `TransferNetworkEntityToAllClients`, which is described below
 
-## Manually control when you want your entity to be transferred to client
+### Manually control when you want your entity to be transferred to client
 
 You have two possibilities of controlling that:
 
@@ -325,7 +340,7 @@ EntityWrapper.Wrap(entity, EntityManager)
     .AddElementToBuffer(new TransferNetworkEntityToClient(reqSrcSourceConnection));
 ```
 
-# Components synchronization
+# Synchronizing components
 
 As an alternatives to Unity Netcode's Ghosts, the lib provides a way of synchronizing components automatically from server to all clients.
 
