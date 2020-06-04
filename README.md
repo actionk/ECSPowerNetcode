@@ -20,6 +20,7 @@ The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packa
 * * [Creating the entity on the client side](#creating-the-entity-on-the-client-side)
 * * [Synchronizing the entity](#synchronizing-the-entity)
 * * [Destroying the entity](#destroying-the-entity)
+* * [Accessing the entities](#accessing-the-entities)
 * * [Customization](#customization)
 * [Synchronizing components](#synchronizing-components)
 * [Managed RPC commands](#managed-rpc-commands)
@@ -379,6 +380,22 @@ When you want to destroy the entity on the server and all the clients at the sam
 
 ```cs
 PostUpdateCommands.AddComponent<ServerDestroy>(myServerEntity);
+```
+
+### Accessing the entities
+
+All:
+
+```cs
+ClientManager.Instance.NetworkEntityManager.All
+ServerManager.Instance.NetworkEntityManager.All
+```
+
+By ID:
+
+```cs
+ClientManager.Instance.NetworkEntityManager[networkEntityId]
+ServerManager.Instance.NetworkEntityManager[networkEntityId]
 ```
 
 ### Customization
