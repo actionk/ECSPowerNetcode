@@ -24,6 +24,12 @@ ClientManager.Instance.ConnectToServer(7979);
 
 After doing so, the library will automatically establish a connection and create command handlers for each connection in both client & server world.
 
+## Connecting to a remote server
+
+```cs
+ClientManager.Instance.ConnectToServer(7979, "remote ip address");
+```
+
 ## Accessing connection's entities
 
 Each connection is described by these parameters:
@@ -120,6 +126,36 @@ Or you can simply broadcast:
 ServerToClientRpcCommandBuilder
     .Broadcast(command)
     .Build(PostUpdateCommands);
+```
+
+## Command handlers
+
+### Client
+
+Simply inherit from `AClientReceiveRpcCommandSystem` to implement a client command handler for RPC command of type `ServerPlayerLoginResponseCommand` (for example):
+
+```cs
+public class ClientPlayerLoginResponseSystem : AClientReceiveRpcCommandSystem<ServerPlayerLoginResponseCommand>
+{
+    protected override void OnCommand(ref ServerPlayerLoginResponseCommand command, ref ReceiveRpcCommandRequestComponent requestComponent)
+    {
+        // process your command
+    }
+}
+```
+
+### Server
+
+Simply inherit from `AServerReceiveRpcCommandSystem` to implement a server command handler for RPC command of type `ClientDropItemCommand` (for example):
+
+```cs
+public class ServerDropItemSystem : AServerReceiveRpcCommandSystem<ClientDropItemCommand>
+{
+    protected override void OnCommand(ref ClientDropItemCommand command, ref ReceiveRpcCommandRequestComponent requestComponent)
+    {
+        // process your command
+    }
+}
 ```
 
 ## Synchronizing entities
@@ -363,3 +399,46 @@ For triggering synchronization process for all the components on the entities, a
 You can also synchronize all transform components in one command by just adding `SyncTransformFromServerToClient` to any entity in server world which has `NetworkEntity` component as well.
 
 If you don't want to recieve such updates on the client side (for example, when you're controlling your character, you don't want to receive updates about his/her position), you can just add `IgnoreTransformCopyingFromServer` component to this entity in client world.
+
+# Managed RPC commands
+
+Sometimes you want to have control over the requests you send to server. For example, when you send a request to perform an action and you wait until the server confirms it. In this case, you need to get a response to that exact request you sent and react to that response. You can do that with so-called managed rpc commands.
+
+First of all, you should create your command which should implement `IManagedRpcCommand` instead of `IRPCCommand`. This interface adds a `PacketId` field that will be filled automatically.
+
+## Client
+
+Then, you send a message to a server using `ClientToServerManagedRpcCommandBuilder`:
+
+```cs
+ClientToServerManagedRpcCommandBuilder
+    .Send(new MyManagedCommand())
+    .AddEntityWaitingForResult(myEntity)
+    .Build(PostUpdateCommands)
+```
+
+## Server
+
+To recieve the command on the server side and process it, you should create a system that implements `AServerReceiveManagedRpcCommandSystem`:
+
+```cs
+class MyCommandRecieveSystem : AServerReceiveManagedRpcCommandSystem<MyManagedCommand> {
+    protected int OnCommand(ref T command, ref ReceiveRpcCommandRequestComponent requestComponent) {
+        // process command
+        return (int)MyStatusEnum.SUCCESS;
+    }
+}
+```
+
+`OnCommand` expects you to return a status int that will be sent back to the client.
+
+Once you respond, the response will be sent back to the client and added to the entity which is waiting for it: `.AddEntityWaitingForResult(myEntity)`.
+The added component is described below:
+
+```cs
+public struct ManagedRpcCommandResponse : IComponentData
+{
+    public ulong packetId;
+    public int result;
+}
+```
