@@ -10,6 +10,7 @@ The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packa
 * * [Starting a server and connecting to it locally](#starting-a-server-and-connecting-to-it-locally)
 * * [Connecting to a remote server](#connecting-to-a-remote-server)
 * * [Accessing connection's entities](#accessing-connections-entities)
+* * [Handlers](#handlers)
 * [Groups](#groups)
 * [Command builders](#command-builders)
 * [Command handlers](#command-handlers)
@@ -19,6 +20,7 @@ The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packa
 * * [Creating the entity on the client side](#creating-the-entity-on-the-client-side)
 * * [Synchronizing the entity](#synchronizing-the-entity)
 * * [Destroying the entity](#destroying-the-entity)
+* * [Customization](#customization)
 * [Synchronizing components](#synchronizing-components)
 * [Managed RPC commands](#managed-rpc-commands)
 
@@ -39,7 +41,7 @@ These are required dependencies
 
 # Getting started
 
-## Starting a server and connecting to it locally
+### Starting a server and connecting to it locally
 
 ```cs
 ServerManager.Instance.StartServer(7979);
@@ -48,13 +50,13 @@ ClientManager.Instance.ConnectToServer(7979);
 
 After doing so, the library will automatically establish a connection and create command handlers for each connection in both client & server world.
 
-## Connecting to a remote server
+### Connecting to a remote server
 
 ```cs
 ClientManager.Instance.ConnectToServer(7979, "remote ip address");
 ```
 
-## Accessing connection's entities
+### Accessing connection's entities
 
 Each connection is described by these parameters:
 
@@ -67,21 +69,43 @@ public struct ConnectionDescription
 }
 ```
 
-### Client side
+#### Client side
 
 `ClientManager.Instance.IsConnected`
 
 `ClientManager.Instance.ConnectionToServer` -> `ConnectionDescription` struct
 
-### Server side
+#### Server side
 
 `ServerManager.Instance.AllConnections` - getting list of all connected clients of `ConnectionDescription` struct
 
 `ServerManager.Instance.GetClientConnectionByNetworkId`
 
-## Groups
+### Handlers
 
-### Client-side
+#### Client
+
+You can set your handlers for `OnConnected` & `OnDisconnected` events:
+
+```cs
+ClientManager.Instance.OnConnectedHandler += MyHandler;
+ClientManager.Instance.OnDisconnectedHandler += MyHandler;
+```
+
+#### Server
+
+You can set your handlers for `OnConnected` & `OnDisconnected` events for each player:
+
+```cs
+public delegate void OnPlayerDisconnected(int networkConnectionId);
+
+ServerManager.Instance.OnPlayerConnectedHandler += MyHandler;
+ServerManager.Instance.OnPlayerDisconnectedHandler += MyHandler;
+```
+
+# Groups
+
+### Client
 
 ```cs
 ClientConnectionSystemGroup
@@ -98,7 +122,7 @@ ClientGameSimulationSystemGroup
 | ClientGameSimulationSystemGroup | All your game simulations on client side |
 
 
-### Server-side
+### Server
 
 ```cs
 ServerConnectionSystemGroup
@@ -114,12 +138,12 @@ ServerGameSimulationSystemGroup
 | ServerNetworkEntitySystemGroup | Processing network entities |
 | ServerGameSimulationSystemGroup | All your game simulations on server side |
 
-## Command builders
+# Command builders
 
 For making your life easier, there are command builders for both client & server commands.
 First of all, you have to create an [IRpcCommand](https://docs.unity3d.com/Packages/com.unity.netcode@0.1/manual/getting-started.html) yourself.
 
-### Client-side
+### Client
 
 ```cs
 ClientToServerRpcCommandBuilder
@@ -129,7 +153,7 @@ ClientToServerRpcCommandBuilder
 
 Where `ClientPlayerLoginCommand` implements `IRpcCommand`
 
-### Server-side
+### Server
 
 
 You can specify which client to send the command to:
@@ -140,7 +164,7 @@ ServerToClientRpcCommandBuilder
     .Build(PostUpdateCommands);
     
 ServerToClientRpcCommandBuilder
-    .SendTo(networkId, command)
+    .SendTo(networkConnectionId, command)
     .Build(PostUpdateCommands);
 ```
 
@@ -152,7 +176,7 @@ ServerToClientRpcCommandBuilder
     .Build(PostUpdateCommands);
 ```
 
-## Command handlers
+# Command handlers
 
 ### Client
 
@@ -192,7 +216,7 @@ That's for, the library provides you with a way of synchronizing entities withou
 
 ![](./.static/synchronizing_entities.png)
 
-#### Creating an entity on server side
+### Creating an entity on server side
 
 You start with creating an entity builder by inheriting your builder from `ServerNetworkEntityBuilder`:
 
@@ -221,7 +245,7 @@ public class ServerPlayerBuilder : ServerNetworkEntityBuilder<ServerPlayerBuilde
 }
 ```
 
-#### Transferring the entity
+### Transferring the entity
 
 Then, you create an RPC command to send the entity to the clients:
 
@@ -311,7 +335,7 @@ public class ServerPlayerTransferSystem : AServerNetworkEntityTransferSystem<Ser
 }
 ```
 
-#### Creating the entity on the client side
+### Creating the entity on the client side
 
 And the system for consuming this command on the client side:
 
@@ -336,7 +360,7 @@ public class ClientPlayerTransferSystem : AClientNetworkEntityTransferSystem<Pla
 
 That's it! When you server entity is created, it will be automatically transferred to the client side by using `TransferNetworkEntityToAllClients`, which is described below
 
-#### Synchronizing the entity
+### Synchronizing the entity
 
 You have two possibilities of controlling that:
 
@@ -349,7 +373,7 @@ EntityWrapper.Wrap(entity, EntityManager)
     .AddElementToBuffer(new TransferNetworkEntityToClient(reqSrcSourceConnection));
 ```
 
-#### Destroying the entity
+### Destroying the entity
 
 When you want to destroy the entity on the server and all the clients at the same time, you can just add a `ServerDestroy` component to server entity and it will be automatically destroyed on all the clients:
 
@@ -357,9 +381,34 @@ When you want to destroy the entity on the server and all the clients at the sam
 PostUpdateCommands.AddComponent<ServerDestroy>(myServerEntity);
 ```
 
+### Customization
+
+You have two ways of customizing your network entities:
+
+#### Custom network entity manager
+
+The default network entity manager is `DefaultNetworkEntityManager` which implements `INetworkEntityManager`. You can just implement `INetworkEntityManager` on your own and set the entity manager for server/client:
+
+```cs
+ClientManager.Instance.NetworkEntityManager = myEntityManager;
+ServerManager.Instance.NetworkEntityManager = myEntityManager;
+```
+
+#### Custom network entity id factory
+
+The default factory implementation is `DefaultNetworkEntityIdFactory`. However, you can also implement your own factory by implementing `INetworkEntityIdFactory` and replacing the default one:
+
+```cs
+ServerManager.Instance.NetworkEntityIdFactory = myEntityManager;
+```
+
+As you can see, it only works for server-side as the server is the one who assign the IDs.
+
 # Synchronizing components
 
 As an alternatives to Unity Netcode's Ghosts, the lib provides a way of synchronizing components automatically from server to all clients.
+
+### Defining a component
 
 Here is the example:
 
@@ -422,11 +471,11 @@ namespace Entities.Players.Packets
 
 This way when you add a `Velocity` component to an entity which also has `NetworkEntity` component, the `Velocity` component will be automatically synchronized.
 
-## Triggering synchronization
+### Triggering synchronization
 
 For triggering synchronization process for all the components on the entities, add `Synchronize` component to the entity.
 
-## Transform synchronization
+### Transform synchronization
 
 You can also synchronize all transform components in one command by just adding `SyncTransformFromServerToClient` to any entity in server world which has `NetworkEntity` component as well.
 
@@ -438,7 +487,7 @@ Sometimes you want to have control over the requests you send to server. For exa
 
 First of all, you should create your command which should implement `IManagedRpcCommand` instead of `IRPCCommand`. This interface adds a `PacketId` field that will be filled automatically.
 
-## Client
+### Client
 
 Then, you send a message to a server using `ClientToServerManagedRpcCommandBuilder`:
 
@@ -449,7 +498,7 @@ ClientToServerManagedRpcCommandBuilder
     .Build(PostUpdateCommands)
 ```
 
-## Server
+### Server
 
 To recieve the command on the server side and process it, you should create a system that implements `AServerReceiveManagedRpcCommandSystem`:
 
