@@ -57,6 +57,7 @@ namespace Plugins.ECSPowerNetcode.Client
 
             var connectToServer = clientWorld.EntityManager.CreateEntity();
             clientWorld.EntityManager.AddComponentData(connectToServer, new ConnectToServer {port = port, host = host});
+            clientWorld.EntityManager.CreateEntity(typeof(FixedClientTickRate));
         }
 
         public void Disconnect()
