@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Sirenix.Utilities;
 
 namespace Plugins.ECSPowerNetcode.Utils
 {
@@ -134,7 +133,10 @@ namespace Plugins.ECSPowerNetcode.Utils
         {
             var result = new HashSet<TValue>();
             foreach (var hashSet in Values)
-                result.AddRange(hashSet);
+            {
+                foreach (var value in hashSet)
+                    result.Add(value);
+            }
 
             return result;
         }

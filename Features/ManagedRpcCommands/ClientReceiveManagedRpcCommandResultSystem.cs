@@ -1,7 +1,7 @@
 using Plugins.ECSPowerNetcode.Client;
 using Plugins.ECSPowerNetcode.Client.Packets;
-using Plugins.UnityExtras.Logs;
 using Unity.NetCode;
+using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
 {
@@ -12,7 +12,7 @@ namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
             var entitiesToBeNotified = ClientManager.Instance.GetEntitiesWaitingForManagedPacket(command.packetId);
             if (entitiesToBeNotified == null)
             {
-                UnityLogger.Warning($"[Client] No entities waiting for response registered for packet {command.packetId}");
+                Debug.LogWarning($"[Client] No entities waiting for response registered for packet {command.packetId}");
                 return;
             }
 
