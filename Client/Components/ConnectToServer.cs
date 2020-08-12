@@ -6,6 +6,6 @@ namespace Plugins.ECSPowerNetcode.Client.Components
     public struct ConnectToServer : IComponentData
     {
         public ushort port;
-        public NativeString32 host;
+        public FixedString32 host;
     }
 }

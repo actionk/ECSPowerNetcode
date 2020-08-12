@@ -40,16 +40,16 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         struct UpdateJob : IJobChunk
         {
             [ReadOnly]
-            public ArchetypeChunkComponentType<NetworkEntity> NetworkEntity;
+            public ComponentTypeHandle<NetworkEntity> NetworkEntity;
 
             [ReadOnly]
-            public ArchetypeChunkComponentType<Translation> TranslationType;
+            public ComponentTypeHandle<Translation> TranslationType;
 
             [ReadOnly]
-            public ArchetypeChunkComponentType<Rotation> RotationType;
+            public ComponentTypeHandle<Rotation> RotationType;
 
             [ReadOnly]
-            public ArchetypeChunkComponentType<Scale> ScaleType;
+            public ComponentTypeHandle<Scale> ScaleType;
 
             public NativeQueue<SyncTransformFromServerToClientCommand>.ParallelWriter Commands;
 
@@ -78,7 +78,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         // [BurstCompile] // RpcQueue.Schedule uses try/catch
         struct SendJob : IJobChunk
         {
-            public ArchetypeChunkBufferType<OutgoingRpcDataStreamBufferComponent> OutgoingRpcDataStreamBufferComponent;
+            public BufferTypeHandle<OutgoingRpcDataStreamBufferComponent> OutgoingRpcDataStreamBufferComponent;
 
             public RpcQueue<SyncTransformFromServerToClientCommand> RpcQueue;
 
@@ -106,10 +106,10 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
             var commandsToSend = new NativeQueue<SyncTransformFromServerToClientCommand>(Allocator.TempJob);
             var updateJob = new UpdateJob
             {
-                NetworkEntity = GetArchetypeChunkComponentType<NetworkEntity>(true),
-                TranslationType = GetArchetypeChunkComponentType<Translation>(true),
-                RotationType = GetArchetypeChunkComponentType<Rotation>(true),
-                ScaleType = GetArchetypeChunkComponentType<Scale>(true),
+                NetworkEntity = GetComponentTypeHandle<NetworkEntity>(true),
+                TranslationType = GetComponentTypeHandle<Translation>(true),
+                RotationType = GetComponentTypeHandle<Rotation>(true),
+                ScaleType = GetComponentTypeHandle<Scale>(true),
                 Commands = commandsToSend.AsParallelWriter()
             };
             var updateJobDependency = updateJob.Schedule(m_updatedComponentsQuery, inputDeps);
@@ -118,7 +118,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
             {
                 RpcQueue = m_rpcQueue,
                 Commands = commandsToSend,
-                OutgoingRpcDataStreamBufferComponent = GetArchetypeChunkBufferType<OutgoingRpcDataStreamBufferComponent>()
+                OutgoingRpcDataStreamBufferComponent = GetBufferTypeHandle<OutgoingRpcDataStreamBufferComponent>()
             };
             var sendJobDependency = sendJob.Schedule(m_connectionsQuery, updateJobDependency);
             commandsToSend.Dispose(sendJobDependency);

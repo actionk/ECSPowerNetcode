@@ -40,10 +40,10 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
         struct UpdateJob : IJobChunk
         {
             [ReadOnly]
-            public ArchetypeChunkComponentType<NetworkEntity> NetworkEntity;
+            public ComponentTypeHandle<NetworkEntity> NetworkEntity;
 
             [ReadOnly]
-            public ArchetypeChunkComponentType<TComponent> Component;
+            public ComponentTypeHandle<TComponent> Component;
 
             public NativeQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>>.ParallelWriter Commands;
 
@@ -71,7 +71,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
         // [BurstCompile] // RpcQueue.Schedule uses try/catch
         struct SendJob : IJobChunk
         {
-            public ArchetypeChunkBufferType<OutgoingRpcDataStreamBufferComponent> OutgoingRpcDataStreamBufferComponent;
+            public BufferTypeHandle<OutgoingRpcDataStreamBufferComponent> OutgoingRpcDataStreamBufferComponent;
 
             public RpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>> RpcQueue;
 
@@ -99,8 +99,8 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
             var commandsToSend = new NativeQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>>(Allocator.TempJob);
             var updateJob = new UpdateJob
             {
-                NetworkEntity = GetArchetypeChunkComponentType<NetworkEntity>(true),
-                Component = GetArchetypeChunkComponentType<TComponent>(true),
+                NetworkEntity = GetComponentTypeHandle<NetworkEntity>(true),
+                Component = GetComponentTypeHandle<TComponent>(true),
                 Commands = commandsToSend.AsParallelWriter()
             };
             var updateJobDependency = updateJob.Schedule(m_updatedComponentsQuery, inputDeps);
@@ -109,7 +109,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
             {
                 RpcQueue = m_rpcQueue,
                 Commands = commandsToSend,
-                OutgoingRpcDataStreamBufferComponent = GetArchetypeChunkBufferType<OutgoingRpcDataStreamBufferComponent>()
+                OutgoingRpcDataStreamBufferComponent = GetBufferTypeHandle<OutgoingRpcDataStreamBufferComponent>()
             };
             var sendJobDependency = sendJob.Schedule(m_connectionsQuery, updateJobDependency);
             commandsToSend.Dispose(sendJobDependency);
