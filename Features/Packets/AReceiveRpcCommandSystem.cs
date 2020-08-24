@@ -3,7 +3,7 @@ using Unity.NetCode;
 
 namespace Plugins.ECSPowerNetcode.Features.Packets
 {
-    public abstract class AReceiveRpcCommandSystem<T> : ComponentSystem where T : struct, IRpcCommand
+    public abstract class AReceiveRpcCommandSystem<T> : ComponentSystem where T : struct, IComponentData
     {
         protected virtual bool ShouldDestroyEntity { get; } = true;
 

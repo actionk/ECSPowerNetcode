@@ -1,11 +1,12 @@
 using Plugins.ECSEntityBuilder;
+using Unity.Entities;
 using Unity.NetCode;
 
 namespace Plugins.ECSPowerNetcode.Client.Packets
 {
     public class ClientToServerRpcCommandBuilder : EntityBuilder<ClientToServerRpcCommandBuilder>
     {
-        public static ClientToServerRpcCommandBuilder Send<T>(T command) where T : struct, IRpcCommand
+        public static ClientToServerRpcCommandBuilder Send<T>(T command) where T : struct, IComponentData
         {
             return new ClientToServerRpcCommandBuilder()
                 .AddComponentData(command)

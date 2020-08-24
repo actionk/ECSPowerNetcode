@@ -13,13 +13,14 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
         where TConverter : struct, ISyncEntityConverter<TComponent>
         where TComponent : struct, IComponentData
     {
-        private RpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>> m_rpcQueue;
+        private RpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>, CopyEntityComponentRpcCommand<TComponent, TConverter>> m_rpcQueue;
         private EntityQuery m_updatedComponentsQuery;
         private EntityQuery m_connectionsQuery;
 
         protected override void OnCreate()
         {
-            m_rpcQueue = World.GetExistingSystem<RpcSystem>().GetRpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>>();
+            m_rpcQueue = World.GetExistingSystem<RpcSystem>()
+                .GetRpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>, CopyEntityComponentRpcCommand<TComponent, TConverter>>();
 
             m_updatedComponentsQuery = GetEntityQuery(
                 new EntityQueryDesc
@@ -39,11 +40,9 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
         [BurstCompile]
         struct UpdateJob : IJobChunk
         {
-            [ReadOnly]
-            public ComponentTypeHandle<NetworkEntity> NetworkEntity;
+            [ReadOnly] public ComponentTypeHandle<NetworkEntity> NetworkEntity;
 
-            [ReadOnly]
-            public ComponentTypeHandle<TComponent> Component;
+            [ReadOnly] public ComponentTypeHandle<TComponent> Component;
 
             public NativeQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>>.ParallelWriter Commands;
 
@@ -73,10 +72,9 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
         {
             public BufferTypeHandle<OutgoingRpcDataStreamBufferComponent> OutgoingRpcDataStreamBufferComponent;
 
-            public RpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>> RpcQueue;
+            public RpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>, CopyEntityComponentRpcCommand<TComponent, TConverter>> RpcQueue;
 
-            [ReadOnly]
-            public NativeQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>> Commands;
+            [ReadOnly] public NativeQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>> Commands;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {

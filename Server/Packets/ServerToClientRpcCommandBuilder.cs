@@ -7,7 +7,7 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
 {
     public class ServerToClientRpcCommandBuilder : EntityBuilder<ServerToClientRpcCommandBuilder>
     {
-        public static ServerToClientRpcCommandBuilder SendTo<T>(Entity serverToClientConnection, T command) where T : struct, IRpcCommand
+        public static ServerToClientRpcCommandBuilder SendTo<T>(Entity serverToClientConnection, T command) where T : struct, IComponentData
         {
             return new ServerToClientRpcCommandBuilder()
                 .AddComponentData(command)
@@ -15,7 +15,7 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
                 .SetName($"RpcCommand {typeof(T).Name}");
         }
 
-        public static ServerToClientRpcCommandBuilder SendTo<T>(int networkConnectionId, T command) where T : struct, IRpcCommand
+        public static ServerToClientRpcCommandBuilder SendTo<T>(int networkConnectionId, T command) where T : struct, IComponentData
         {
             var connection = ServerManager.Instance.GetClientConnectionByNetworkId(networkConnectionId);
             if (connection.IsEmpty)
@@ -27,7 +27,7 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
                 .SetName($"RpcCommand {typeof(T).Name}");
         }
 
-        public static ServerToClientRpcCommandBuilder Broadcast<T>(T command) where T : struct, IRpcCommand
+        public static ServerToClientRpcCommandBuilder Broadcast<T>(T command) where T : struct, IComponentData
         {
             return new ServerToClientRpcCommandBuilder()
                 .AddComponentData(command)

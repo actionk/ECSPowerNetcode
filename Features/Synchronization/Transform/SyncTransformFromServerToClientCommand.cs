@@ -1,4 +1,5 @@
 using Unity.Burst;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.NetCode;
 using Unity.Networking.Transport;
@@ -6,7 +7,7 @@ using Unity.Networking.Transport;
 namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
 {
     [BurstCompile]
-    public struct SyncTransformFromServerToClientCommand : IRpcCommand
+    public struct SyncTransformFromServerToClientCommand : IComponentData, IRpcCommandSerializer<SyncTransformFromServerToClientCommand>
     {
         public uint tick;
         public ulong networkEntityId;
@@ -14,41 +15,45 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         public quaternion rotation;
         public float scale;
 
-        public void Serialize(ref DataStreamWriter writer)
+        #region Serialization
+
+        public void Serialize(ref DataStreamWriter writer, in SyncTransformFromServerToClientCommand data)
         {
-            writer.WriteUInt(tick);
-            writer.WriteULong(networkEntityId);
+            writer.WriteUInt(data.tick);
+            writer.WriteULong(data.networkEntityId);
 
-            writer.WriteFloat(position.x);
-            writer.WriteFloat(position.y);
-            writer.WriteFloat(position.z);
+            writer.WriteFloat(data.position.x);
+            writer.WriteFloat(data.position.y);
+            writer.WriteFloat(data.position.z);
 
-            writer.WriteFloat(rotation.value.x);
-            writer.WriteFloat(rotation.value.y);
-            writer.WriteFloat(rotation.value.z);
-            writer.WriteFloat(rotation.value.w);
+            writer.WriteFloat(data.rotation.value.x);
+            writer.WriteFloat(data.rotation.value.y);
+            writer.WriteFloat(data.rotation.value.z);
+            writer.WriteFloat(data.rotation.value.w);
 
-            writer.WriteFloat(scale);
+            writer.WriteFloat(data.scale);
         }
 
-        public void Deserialize(ref DataStreamReader reader)
+        public void Deserialize(ref DataStreamReader reader, ref SyncTransformFromServerToClientCommand data)
         {
-            tick = reader.ReadUInt();
-            networkEntityId = reader.ReadULong();
+            data.tick = reader.ReadUInt();
+            data.networkEntityId = reader.ReadULong();
 
-            position = new float3(
+            data.position = new float3(
                 reader.ReadFloat(),
                 reader.ReadFloat(),
                 reader.ReadFloat()
             );
-            rotation = new quaternion(
+            data.rotation = new quaternion(
                 reader.ReadFloat(),
                 reader.ReadFloat(),
                 reader.ReadFloat(),
                 reader.ReadFloat()
             );
-            scale = reader.ReadFloat();
+            data.scale = reader.ReadFloat();
         }
+
+        #endregion
 
         #region Implementation
 
@@ -60,7 +65,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         [BurstCompile]
         private static void InvokeExecute(ref RpcExecutor.Parameters parameters)
         {
-            RpcExecutor.ExecuteCreateRequestComponent<SyncTransformFromServerToClientCommand>(ref parameters);
+            RpcExecutor.ExecuteCreateRequestComponent<SyncTransformFromServerToClientCommand, SyncTransformFromServerToClientCommand>(ref parameters);
         }
 
         private static readonly PortableFunctionPointer<RpcExecutor.ExecuteDelegate> INVOKE_EXECUTE_FUNCTION_POINTER =
@@ -70,7 +75,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
 
         #region Sender
 
-        public class ServerCopyTransformSendSystem : RpcCommandRequestSystem<SyncTransformFromServerToClientCommand>
+        public class ServerCopyTransformSendSystem : RpcCommandRequestSystem<SyncTransformFromServerToClientCommand, SyncTransformFromServerToClientCommand>
         {
         }
 

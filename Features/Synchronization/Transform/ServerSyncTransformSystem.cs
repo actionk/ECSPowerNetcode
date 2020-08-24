@@ -12,13 +12,13 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
     [UpdateInGroup(typeof(ServerNetworkEntitySynchronizationSystemGroup))]
     public class ServerSyncTransformSystem : JobComponentSystem
     {
-        private RpcQueue<SyncTransformFromServerToClientCommand> m_rpcQueue;
+        private RpcQueue<SyncTransformFromServerToClientCommand, SyncTransformFromServerToClientCommand> m_rpcQueue;
         private EntityQuery m_updatedComponentsQuery;
         private EntityQuery m_connectionsQuery;
 
         protected override void OnCreate()
         {
-            m_rpcQueue = World.GetExistingSystem<RpcSystem>().GetRpcQueue<SyncTransformFromServerToClientCommand>();
+            m_rpcQueue = World.GetExistingSystem<RpcSystem>().GetRpcQueue<SyncTransformFromServerToClientCommand, SyncTransformFromServerToClientCommand>();
 
             m_updatedComponentsQuery = GetEntityQuery(new EntityQueryDesc
             {
@@ -39,17 +39,13 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         [BurstCompile]
         struct UpdateJob : IJobChunk
         {
-            [ReadOnly]
-            public ComponentTypeHandle<NetworkEntity> NetworkEntity;
+            [ReadOnly] public ComponentTypeHandle<NetworkEntity> NetworkEntity;
 
-            [ReadOnly]
-            public ComponentTypeHandle<Translation> TranslationType;
+            [ReadOnly] public ComponentTypeHandle<Translation> TranslationType;
 
-            [ReadOnly]
-            public ComponentTypeHandle<Rotation> RotationType;
+            [ReadOnly] public ComponentTypeHandle<Rotation> RotationType;
 
-            [ReadOnly]
-            public ComponentTypeHandle<Scale> ScaleType;
+            [ReadOnly] public ComponentTypeHandle<Scale> ScaleType;
 
             public NativeQueue<SyncTransformFromServerToClientCommand>.ParallelWriter Commands;
 
@@ -80,10 +76,9 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         {
             public BufferTypeHandle<OutgoingRpcDataStreamBufferComponent> OutgoingRpcDataStreamBufferComponent;
 
-            public RpcQueue<SyncTransformFromServerToClientCommand> RpcQueue;
+            public RpcQueue<SyncTransformFromServerToClientCommand, SyncTransformFromServerToClientCommand> RpcQueue;
 
-            [ReadOnly]
-            public NativeQueue<SyncTransformFromServerToClientCommand> Commands;
+            [ReadOnly] public NativeQueue<SyncTransformFromServerToClientCommand> Commands;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
