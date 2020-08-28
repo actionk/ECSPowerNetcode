@@ -1,5 +1,4 @@
 using Plugins.ECSPowerNetcode.Client.Groups;
-using Plugins.UnityExtras.Logs;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;

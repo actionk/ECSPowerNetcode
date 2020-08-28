@@ -1,6 +1,5 @@
 using Plugins.ECSPowerNetcode.Server.Components;
 using Plugins.ECSPowerNetcode.Server.Groups;
-using Plugins.UnityExtras.Logs;
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Networking.Transport;
