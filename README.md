@@ -1,6 +1,6 @@
 # ECSPowerNetcode
 
-The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packages/com.unity.netcode@0.1/manual/index.html) package and saves you some time on configuring it / provides tools for client-server communication.
+The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packages/com.unity.netcode@0.3/manual/index.html) package and saves you some time on configuring it / provides tools for client-server communication.
 
 # Table of Contents
 
@@ -36,7 +36,7 @@ git submodule add https://github.com/actionk/ECSPowerNetcode.git Assets/Plugins/
 
 The library depends on:
 * [UnityECSEntityBuilder](https://github.com/actionk/UnityECSEntityBuilder)
-* [Unity Netcode 0.2](https://docs.unity3d.com/Packages/com.unity.netcode@0.2/manual/index.html)
+* [Unity Netcode 0.3](https://docs.unity3d.com/Packages/com.unity.netcode@0.2/manual/index.html)
 
 These are required dependencies
 
