@@ -18,7 +18,7 @@ namespace Plugins.ECSPowerNetcode.Client.Entities
             Entities
                 .ForEach((Entity entity, ref TCommand command, ref ReceiveRpcCommandRequestComponent requestComponent) =>
                 {
-                    Debug.Log($"[Client] Creating a client entity with id {command.NetworkEntityId}");
+                    Debug.Log($"[Client] Creating a client entity [{GetType()}] with id {command.NetworkEntityId}");
 
                     var existingEntity = ClientManager.Instance.NetworkEntityManager.GetEntityByNetworkEntityId(command.NetworkEntityId);
                     if (existingEntity != Entity.Null)
