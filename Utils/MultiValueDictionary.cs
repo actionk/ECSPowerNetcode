@@ -39,6 +39,27 @@ namespace Plugins.ECSPowerNetcode.Utils
 
 
         /// <summary>
+        /// Adds all values under the specified key
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        public void AddRange(TKey key, HashSet<TValue> value)
+        {
+            HashSet<TValue> container = null;
+            if (!this.TryGetValue(key, out container))
+            {
+                container = new HashSet<TValue>();
+                base.Add(key, container);
+            }
+
+            foreach (var inner in value)
+            {
+                container.Add(inner);
+            }
+        }
+
+
+        /// <summary>
         /// Determines whether this dictionary contains the specified value for the specified key 
         /// </summary>
         /// <param name="key">The key.</param>
