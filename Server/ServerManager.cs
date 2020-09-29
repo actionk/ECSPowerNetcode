@@ -21,7 +21,7 @@ namespace Plugins.ECSPowerNetcode.Server
 
         public INetworkEntityManager NetworkEntityManager { get; set; } = new DefaultNetworkEntityManager();
         public INetworkEntityIdFactory NetworkEntityIdFactory { get; set; } = new DefaultNetworkEntityIdFactory();
-        public ulong NextNetworkEntityId => NetworkEntityIdFactory.NextId();
+        public uint NextNetworkEntityId => NetworkEntityIdFactory.NextId();
 
         private readonly Dictionary<int, ConnectionDescription> m_openedConnections = new Dictionary<int, ConnectionDescription>();
 

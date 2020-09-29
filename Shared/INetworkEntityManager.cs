@@ -5,10 +5,10 @@ namespace Plugins.ECSPowerNetcode.Shared
 {
     public interface INetworkEntityManager
     {
-        void Add(ulong networkEntityId, Entity entity);
-        Entity GetEntityByNetworkEntityId(ulong networkEntityId);
-        bool Remove(ulong networkEntityId);
+        void Add(uint networkEntityId, Entity entity);
+        Entity GetEntityByNetworkEntityId(uint networkEntityId);
+        bool Remove(uint networkEntityId);
 
-        Dictionary<ulong, Entity> All { get; }
+        Dictionary<uint, Entity> All { get; }
     }
 }

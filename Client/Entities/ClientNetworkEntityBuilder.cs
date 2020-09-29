@@ -6,9 +6,9 @@ namespace Plugins.ECSPowerNetcode.Client.Entities
 {
     public abstract class ClientNetworkEntityBuilder<T> : EntityBuilder<T> where T : EntityBuilder<T>
     {
-        protected readonly ulong networkEntityId;
+        protected readonly uint networkEntityId;
 
-        protected ClientNetworkEntityBuilder(ulong networkEntityId)
+        protected ClientNetworkEntityBuilder(uint networkEntityId)
         {
             this.networkEntityId = networkEntityId;
 

@@ -9,20 +9,20 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
     public struct CopyEntityComponentRpcCommand<TComponent, TConverter> : IComponentData, IRpcCommandSerializer<CopyEntityComponentRpcCommand<TComponent, TConverter>>
         where TConverter : struct, ISyncEntityConverter<TComponent>
     {
-        public ulong networkEntityId;
+        public uint networkEntityId;
         public TConverter component;
 
         #region Serialization
 
         public void Serialize(ref DataStreamWriter writer, in CopyEntityComponentRpcCommand<TComponent, TConverter> data)
         {
-            writer.WriteULong(data.networkEntityId);
+            writer.WriteUInt(data.networkEntityId);
             data.component.Serialize(ref writer);
         }
 
         public void Deserialize(ref DataStreamReader reader, ref CopyEntityComponentRpcCommand<TComponent, TConverter> data)
         {
-            data.networkEntityId = reader.ReadULong();
+            data.networkEntityId = reader.ReadUInt();
             data.component.Deserialize(ref reader);
         }
 

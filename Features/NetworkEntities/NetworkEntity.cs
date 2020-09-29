@@ -4,6 +4,6 @@ namespace Plugins.ECSPowerNetcode.Features.NetworkEntities
 {
     public struct NetworkEntity : IComponentData
     {
-        public ulong networkEntityId;
+        public uint networkEntityId;
     }
 }

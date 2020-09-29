@@ -10,7 +10,7 @@ namespace Plugins.ECSPowerNetcode.Client.Entities
     public abstract class AClientNetworkEntityBuilderSystem<TCommand> : ComponentSystem
         where TCommand : struct, INetworkEntityCopyRpcCommand
     {
-        protected abstract void CreateNetworkEntity(ulong networkEntityId, TCommand command);
+        protected abstract void CreateNetworkEntity(uint networkEntityId, TCommand command);
         protected abstract void SynchronizeNetworkEntity(Entity entity, TCommand command);
 
         protected override void OnUpdate()

@@ -6,7 +6,7 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
 {
     public abstract class ServerNetworkEntityBuilder<T> : EntityBuilder<T> where T : EntityBuilder<T>
     {
-        public ulong NetworkEntityId { get; }
+        public uint NetworkEntityId { get; }
 
         protected ServerNetworkEntityBuilder()
         {
@@ -14,7 +14,7 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
             AddComponentData(new NetworkEntity {networkEntityId = NetworkEntityId});
         }
 
-        protected ServerNetworkEntityBuilder(ulong networkEntityId)
+        protected ServerNetworkEntityBuilder(uint networkEntityId)
         {
             AddComponentData(new NetworkEntity {networkEntityId = networkEntityId});
         }

@@ -6,6 +6,6 @@ namespace Plugins.ECSPowerNetcode.Server.Destroying
     [BurstCompile]
     public struct ServerNetworkEntityDestroyCommand : IRpcCommand
     {
-        public ulong networkEntityId;
+        public uint networkEntityId;
     }
 }

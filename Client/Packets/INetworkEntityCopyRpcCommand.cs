@@ -5,6 +5,6 @@ namespace Plugins.ECSPowerNetcode.Client.Packets
 {
     public interface INetworkEntityCopyRpcCommand : IComponentData
     {
-        ulong NetworkEntityId { get; }
+        uint NetworkEntityId { get; }
     }
 }
