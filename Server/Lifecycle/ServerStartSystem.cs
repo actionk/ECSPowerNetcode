@@ -24,7 +24,7 @@ namespace Plugins.ECSPowerNetcode.Server.Lifecycle
             NetworkEndPoint ep = NetworkEndPoint.AnyIpv4;
             ep.Port = startServer.port;
             network.Listen(ep);
-            
+
             Debug.Log($"[Server] Started on {ep.Port} port in {World.Name} world");
         }
     }

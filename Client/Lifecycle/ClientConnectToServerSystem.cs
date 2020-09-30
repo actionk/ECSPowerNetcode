@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using Plugins.ECSPowerNetcode.Client.Components;
 using Plugins.ECSPowerNetcode.Client.Groups;
@@ -33,7 +32,7 @@ namespace Plugins.ECSPowerNetcode.Client.Lifecycle
 
             network.Connect(ep);
 
-            Debug.Log($"[Client] Connected to server on {ep.Port} port");
+            Debug.Log($"[Client] Connecting to server on {connectToServer.host.ToString()}:{ep.Port}");
         }
     }
 }

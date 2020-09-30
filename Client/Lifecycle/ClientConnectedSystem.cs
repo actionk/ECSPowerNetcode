@@ -17,7 +17,7 @@ namespace Plugins.ECSPowerNetcode.Client.Lifecycle
                 .WithNone<NetworkStreamInGame>()
                 .ForEach((Entity connectionEntity, ref NetworkIdComponent id) =>
                 {
-                    Debug.Log($"[Client] Connection to server established with network id = [{id.Value}]");
+                    Debug.Log($"[Client] Connected to server. Network id = [{id.Value}]");
 
                     EntityWrapper.Wrap(connectionEntity, EntityManager)
                         .SetName($"ServerConnection_{id.Value}");

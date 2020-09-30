@@ -1,6 +1,7 @@
 using Plugins.ECSEntityBuilder;
 using Plugins.ECSPowerNetcode.Server.Components;
 using Plugins.ECSPowerNetcode.Server.Groups;
+using Plugins.ECSPowerNetcode.Shared.Components;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
@@ -32,6 +33,19 @@ namespace Plugins.ECSPowerNetcode.Server.Lifecycle
                     PostUpdateCommands.AddComponent<NetworkStreamInGame>(connectionEntity);
 
                     ServerManager.Instance.OnConnected(networkIdComponent.Value, connectionEntity, connectionCommandHandler);
+
+                    var ghostCollection = GetSingletonEntity<GhostPrefabCollectionComponent>();
+                    var prefab = Entity.Null;
+                    var prefabs = EntityManager.GetBuffer<GhostPrefabBuffer>(ghostCollection);
+                    for (int ghostId = 0; ghostId < prefabs.Length; ++ghostId)
+                    {
+                        if (EntityManager.HasComponent<SyncGhostComponent>(prefabs[ghostId].Value))
+                            prefab = prefabs[ghostId].Value;
+                    }
+
+                    EntityWrapper.Instantiate(prefab, PostUpdateCommands)
+                        .SetName($"ClientConnection_{networkIdComponent.Value}_Ghost")
+                        .AddComponentData(new GhostOwnerComponent {NetworkId = networkIdComponent.Value});
                 });
         }
     }

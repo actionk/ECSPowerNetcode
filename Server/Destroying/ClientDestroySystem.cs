@@ -12,7 +12,7 @@ namespace Plugins.ECSPowerNetcode.Server.Destroying
             var networkEntity = ClientManager.Instance.NetworkEntityManager.GetEntityByNetworkEntityId(command.networkEntityId);
             if (networkEntity == Entity.Null)
                 return;
-            
+
             PostUpdateCommands.DestroyEntity(networkEntity);
         }
     }
