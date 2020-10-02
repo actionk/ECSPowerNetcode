@@ -49,7 +49,7 @@ MonoBehaviour:
   SupportedGhostModes: 3
   OptimizationMode: 0
   Importance: 1
-  prefabId: 
+  prefabId: fa624df06de47f64daccfbbfedf9eed6
   Name: NetworkConnectionGhost
 --- !u!114 &6759734984472540459
 MonoBehaviour:
