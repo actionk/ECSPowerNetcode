@@ -1,13 +1,13 @@
 using Plugins.ECSPowerNetcode.Client;
 using Plugins.ECSPowerNetcode.Client.Packets;
-using Unity.NetCode;
+using Plugins.ECSPowerNetcode.Shared;
 using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
 {
     public class ClientReceiveManagedRpcCommandResultSystem : AClientReceiveRpcCommandSystem<ManagedRpcCommandResult>
     {
-        protected override void OnCommand(ref ManagedRpcCommandResult command, ref ReceiveRpcCommandRequestComponent requestComponent)
+        protected override void OnCommand(ref ManagedRpcCommandResult command, ConnectionDescription connectionToServer)
         {
             var entitiesToBeNotified = ClientManager.Instance.GetEntitiesWaitingForManagedPacket(command.packetId);
             if (entitiesToBeNotified == null)

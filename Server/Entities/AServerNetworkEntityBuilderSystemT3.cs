@@ -8,20 +8,22 @@ using Unity.Entities;
 namespace Plugins.ECSPowerNetcode.Server.Entities
 {
     [UpdateInGroup(typeof(ServerRequestProcessingSystemGroup))]
-    public abstract class AServerNetworkEntityBuilderSystemT2<TSelector, TSelector2, TCommand> : ComponentSystem
+    public abstract class AServerNetworkEntityBuilderSystemT3<TSelector, TSelector2, TSelector3, TCommand> : ComponentSystem
         where TSelector : struct, IComponentData
         where TSelector2 : struct, IComponentData
+        where TSelector3 : struct, IComponentData
         where TCommand : struct, INetworkEntityCopyRpcCommand
     {
-        protected abstract TCommand CreateTransferCommandForEntity(Entity entity, NetworkEntity networkEntity, ref TSelector selectorComponent, ref TSelector2 selectorComponent2);
+        protected abstract TCommand CreateTransferCommandForEntity(Entity entity, NetworkEntity networkEntity, ref TSelector selectorComponent, ref TSelector2 selectorComponent2,
+            ref TSelector3 selectorComponent3);
 
         protected override void OnUpdate()
         {
             Entities
-                .WithAll<TSelector, TSelector2, NetworkEntity, NetworkEntityRegistered, TransferNetworkEntityToAllClients>()
-                .ForEach((Entity entity, ref NetworkEntity networkEntity, ref TSelector selectorComponent, ref TSelector2 selectorComponent2) =>
+                .WithAll<NetworkEntity, NetworkEntityRegistered, TransferNetworkEntityToAllClients>()
+                .ForEach((Entity entity, ref NetworkEntity networkEntity, ref TSelector selectorComponent, ref TSelector2 selectorComponent2, ref TSelector3 selectorComponent3) =>
                 {
-                    var command = CreateTransferCommandForEntity(entity, networkEntity, ref selectorComponent, ref selectorComponent2);
+                    var command = CreateTransferCommandForEntity(entity, networkEntity, ref selectorComponent, ref selectorComponent2, ref selectorComponent3);
                     ServerToClientRpcCommandBuilder
                         .Broadcast(command)
                         .Build(PostUpdateCommands);
@@ -30,11 +32,11 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 });
 
             Entities
-                .WithAll<TSelector, TSelector2, NetworkEntity, NetworkEntityRegistered, TransferNetworkEntityToClient>()
+                .WithAll<NetworkEntity, NetworkEntityRegistered, TransferNetworkEntityToClient>()
                 .ForEach((Entity entity, DynamicBuffer<TransferNetworkEntityToClient> clients, ref NetworkEntity networkEntity, ref TSelector selectorComponent,
-                    ref TSelector2 selectorComponent2) =>
+                    ref TSelector2 selectorComponent2, ref TSelector3 selectorComponent3) =>
                 {
-                    var command = CreateTransferCommandForEntity(entity, networkEntity, ref selectorComponent, ref selectorComponent2);
+                    var command = CreateTransferCommandForEntity(entity, networkEntity, ref selectorComponent, ref selectorComponent2, ref selectorComponent3);
                     foreach (var clientEntity in clients)
                     {
                         ServerToClientRpcCommandBuilder

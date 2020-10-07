@@ -31,14 +31,10 @@ namespace Plugins.ECSPowerNetcode.Client
 
         public void OnConnectedToServer(Entity connectionEntity, Entity commandHandlerEntity, int networkConnectionId)
         {
-            var connectionToServer = ConnectionToServer;
-            connectionToServer.connectionEntity = connectionEntity;
-            connectionToServer.commandHandlerEntity = commandHandlerEntity;
-            connectionToServer.networkId = networkConnectionId;
-            ConnectionToServer = connectionToServer;
+            ConnectionToServer = new ConnectionDescription(networkConnectionId, connectionEntity, commandHandlerEntity);
             IsConnected = true;
 
-            OnConnectedHandler?.Invoke(connectionToServer);
+            OnConnectedHandler?.Invoke(ConnectionToServer);
         }
 
         public void OnDisconnectedFromServer()

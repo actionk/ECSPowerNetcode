@@ -1,6 +1,6 @@
 using Plugins.ECSEntityBuilder;
 using Plugins.ECSPowerNetcode.Features.NetworkEntities;
-using Plugins.ECSPowerNetcode.Shared;
+using Plugins.ECSPowerNetcode.Server.Components;
 
 namespace Plugins.ECSPowerNetcode.Server.Entities
 {
@@ -17,6 +17,17 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
         protected ServerNetworkEntityBuilder(uint networkEntityId)
         {
             AddComponentData(new NetworkEntity {networkEntityId = networkEntityId});
+        }
+
+        protected override void OnPreBuild(EntityManagerWrapper wrapper)
+        {
+            if (ShouldBeSynchronizedToClients())
+                AddComponent<TransferNetworkEntityToAllClients>();
+        }
+
+        protected virtual bool ShouldBeSynchronizedToClients()
+        {
+            return true;
         }
     }
 }

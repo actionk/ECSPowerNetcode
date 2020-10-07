@@ -3,7 +3,6 @@ using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Server.Components;
 using Plugins.ECSPowerNetcode.Server.Groups;
 using Plugins.ECSPowerNetcode.Server.Packets;
-using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 
 namespace Plugins.ECSPowerNetcode.Server.Entities
@@ -13,7 +12,7 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
         where TSelector : struct, IComponentData
         where TCommand : struct, INetworkEntityCopyRpcCommand
     {
-        protected abstract TCommand CreateTransferCommandForEntity(Entity entity, NetworkEntity networkEntity, TSelector selectorComponent);
+        protected abstract TCommand CreateTransferCommandForEntity(Entity entity, ref NetworkEntity networkEntity, ref TSelector selectorComponent);
 
         protected override void OnUpdate()
         {
@@ -21,7 +20,7 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 .WithAll<TSelector, NetworkEntity, TransferNetworkEntityToAllClients>()
                 .ForEach((Entity entity, ref NetworkEntity networkEntity, ref TSelector selectorComponent) =>
                 {
-                    var command = CreateTransferCommandForEntity(entity, networkEntity, selectorComponent);
+                    var command = CreateTransferCommandForEntity(entity, ref networkEntity, ref selectorComponent);
                     ServerToClientRpcCommandBuilder
                         .Broadcast(command)
                         .Build(PostUpdateCommands);
@@ -33,7 +32,7 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 .WithAll<TSelector, NetworkEntity, TransferNetworkEntityToClient>()
                 .ForEach((Entity entity, DynamicBuffer<TransferNetworkEntityToClient> clients, ref NetworkEntity networkEntity, ref TSelector selectorComponent) =>
                 {
-                    var command = CreateTransferCommandForEntity(entity, networkEntity, selectorComponent);
+                    var command = CreateTransferCommandForEntity(entity, ref networkEntity, ref selectorComponent);
                     foreach (var clientEntity in clients)
                     {
                         ServerToClientRpcCommandBuilder

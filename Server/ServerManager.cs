@@ -23,28 +23,31 @@ namespace Plugins.ECSPowerNetcode.Server
         public INetworkEntityIdFactory NetworkEntityIdFactory { get; set; } = new DefaultNetworkEntityIdFactory();
         public uint NextNetworkEntityId => NetworkEntityIdFactory.NextId();
 
-        private readonly Dictionary<int, ConnectionDescription> m_openedConnections = new Dictionary<int, ConnectionDescription>();
+        private readonly Dictionary<Entity, ConnectionDescription> m_openedConnectionsByConnectionEntity = new Dictionary<Entity, ConnectionDescription>();
+        private readonly Dictionary<int, ConnectionDescription> m_openedConnectionsById = new Dictionary<int, ConnectionDescription>();
 
-        public void OnConnected(int networkId, Entity connectionEntity, Entity commandHandlerEntity)
+        public void OnConnected(int networkConnectionId, Entity connectionEntity, Entity commandHandlerEntity)
         {
-            m_openedConnections[networkId] = new ConnectionDescription
-            {
-                networkId = networkId,
-                connectionEntity = connectionEntity,
-                commandHandlerEntity = commandHandlerEntity
-            };
-            OnPlayerConnectedHandler?.Invoke(networkId, connectionEntity, commandHandlerEntity);
+            var connectionDescription = new ConnectionDescription(networkConnectionId, connectionEntity, commandHandlerEntity);
+            m_openedConnectionsByConnectionEntity[connectionEntity] = connectionDescription;
+            m_openedConnectionsById[networkConnectionId] = connectionDescription;
+            OnPlayerConnectedHandler?.Invoke(networkConnectionId, connectionEntity, commandHandlerEntity);
         }
 
         public void OnDisconnected(int networkId)
         {
-            m_openedConnections.Remove(networkId);
+            m_openedConnectionsById.Remove(networkId);
             OnPlayerDisconnectedHandler?.Invoke(networkId);
         }
 
         public ConnectionDescription GetClientConnectionByNetworkId(int networkId)
         {
-            return m_openedConnections[networkId];
+            return m_openedConnectionsById[networkId];
+        }
+
+        public ConnectionDescription GetClientConnectionByConnectionEntity(Entity connectionEntity)
+        {
+            return m_openedConnectionsByConnectionEntity[connectionEntity];
         }
 
         public void StartServer(ushort port)
@@ -57,7 +60,7 @@ namespace Plugins.ECSPowerNetcode.Server
             serverWorld.EntityManager.AddComponentData(startServerEntity, new StartServer {port = port});
         }
 
-        public List<ConnectionDescription> AllConnections => m_openedConnections.Values.ToList();
+        public List<ConnectionDescription> AllConnections => m_openedConnectionsById.Values.ToList();
 
         #region Singleton
 

@@ -2,12 +2,19 @@ using Unity.Entities;
 
 namespace Plugins.ECSPowerNetcode.Shared
 {
-    public struct ConnectionDescription
+    public class ConnectionDescription
     {
-        public int networkId;
-        public Entity connectionEntity;
-        public Entity commandHandlerEntity;
+        public readonly int networkConnectionId;
+        public readonly Entity connectionEntity;
+        public readonly Entity commandHandlerEntity;
 
-        public bool IsEmpty => networkId == 0;
+        public ConnectionDescription(int networkConnectionId, Entity connectionEntity, Entity commandHandlerEntity)
+        {
+            this.networkConnectionId = networkConnectionId;
+            this.connectionEntity = connectionEntity;
+            this.commandHandlerEntity = commandHandlerEntity;
+        }
+
+        public bool IsEmpty => networkConnectionId == 0;
     }
 }
