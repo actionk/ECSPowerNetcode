@@ -38,6 +38,9 @@ You can either just put the files into `Assets/Plugins/ECSEntityBuilder` or use 
 git submodule add https://github.com/actionk/ECSPowerNetcode.git Assets/Plugins/ECSPowerNetcode
 ```
 
+**Important!**
+After adding a plugin, please add the `Network` prefab into your scene from `ECSPowerNetcode/Prefabs` folder. This will enable networking.
+
 ## Dependencies
 
 The library depends on:
