@@ -7,9 +7,9 @@ namespace Plugins.ECSPowerNetcode.Server.Destroying
 {
     public class ClientDestroySystem : AClientReceiveRpcCommandSystem<ServerNetworkEntityDestroyCommand>
     {
-        protected override void OnCommand(ref ServerNetworkEntityDestroyCommand command, ConnectionDescription connectionToServer)
+        protected override void OnCommand(ref ServerNetworkEntityDestroyCommand packet, ConnectionDescription connectionToServer)
         {
-            var networkEntity = ClientManager.Instance.NetworkEntityManager.GetEntityByNetworkEntityId(command.networkEntityId);
+            var networkEntity = ClientManager.Instance.NetworkEntityManager.GetEntityByNetworkEntityId(packet.networkEntityId);
             if (networkEntity == Entity.Null)
                 return;
 

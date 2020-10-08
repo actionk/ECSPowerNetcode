@@ -7,12 +7,12 @@ namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
 {
     public class ClientReceiveManagedRpcCommandResultSystem : AClientReceiveRpcCommandSystem<ManagedRpcCommandResult>
     {
-        protected override void OnCommand(ref ManagedRpcCommandResult command, ConnectionDescription connectionToServer)
+        protected override void OnCommand(ref ManagedRpcCommandResult packet, ConnectionDescription connectionToServer)
         {
-            var entitiesToBeNotified = ClientManager.Instance.GetEntitiesWaitingForManagedPacket(command.packetId);
+            var entitiesToBeNotified = ClientManager.Instance.GetEntitiesWaitingForManagedPacket(packet.packetId);
             if (entitiesToBeNotified == null)
             {
-                Debug.LogWarning($"[Client] No entities waiting for response registered for packet {command.packetId}");
+                Debug.LogWarning($"[Client] No entities waiting for response registered for packet {packet.packetId}");
                 return;
             }
 
@@ -20,8 +20,8 @@ namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
             {
                 PostUpdateCommands.AddComponent(entity, new ManagedRpcCommandResponse
                 {
-                    packetId = command.packetId,
-                    result = command.result
+                    packetId = packet.packetId,
+                    result = packet.result
                 });
             }
         }
