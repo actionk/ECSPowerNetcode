@@ -10,7 +10,7 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
     {
         protected virtual bool ShouldDestroyEntity { get; } = true;
 
-        protected abstract void OnCommand(ref T command, ConnectionDescription clientConnection);
+        protected abstract void OnCommand(ref T packet, ConnectionDescription clientConnection);
 
         protected override void OnUpdate()
         {
