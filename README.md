@@ -1,6 +1,8 @@
 # ECSPowerNetcode
 
-The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packages/com.unity.netcode@0.3/manual/index.html) package and saves you some time on configuring it / provides tools for client-server communication.
+The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packages/com.unity.netcode@0.4/manual/index.html) package and saves you some time on configuring it / provides tools for client-server communication.
+
+[![](./.static/demo.png)](https://github.com/actionk/ECSPowerNetcodeDemo)
 
 # Table of Contents
 
@@ -24,6 +26,10 @@ The library is made on top of the [Unity Netcode](https://docs.unity3d.com/Packa
 * * [Customization](#customization)
 * [Synchronizing components](#synchronizing-components)
 * [Managed RPC commands](#managed-rpc-commands)
+
+# Demo
+
+I like to have this repo as a module without a unity project, so please go to another repo which I created just for a demo: [ECSPowerNetcodeDemo](https://github.com/actionk/ECSPowerNetcodeDemo).
 
 # Install
 
@@ -186,7 +192,7 @@ Simply inherit from `AClientReceiveRpcCommandSystem` to implement a client comma
 ```cs
 public class ClientPlayerLoginResponseSystem : AClientReceiveRpcCommandSystem<ServerPlayerLoginResponseCommand>
 {
-    protected override void OnCommand(ref ServerPlayerLoginResponseCommand command, ref ReceiveRpcCommandRequestComponent requestComponent)
+    protected override void OnCommand(ref ServerPlayerLoginResponseCommand command, ConnectionDescription clientConnection)
     {
         // process your command
     }
@@ -200,7 +206,7 @@ Simply inherit from `AServerReceiveRpcCommandSystem` to implement a server comma
 ```cs
 public class ServerDropItemSystem : AServerReceiveRpcCommandSystem<ClientDropItemCommand>
 {
-    protected override void OnCommand(ref ClientDropItemCommand command, ref ReceiveRpcCommandRequestComponent requestComponent)
+    protected override void OnCommand(ref ClientDropItemCommand command, ConnectionDescription clientConnection)
     {
         // process your command
     }
@@ -252,7 +258,7 @@ Then, you create an RPC command to send the entity to the clients:
 
 ```cs
 [BurstCompile]
-public struct PlayerTransferCommand : INetworkEntityCopyRpcCommand
+public struct PlayerTransferCommand : INetworkEntityCopyRpcCommand, IRpcCommand
 {
     public ulong NetworkEntityId => networkEntityId;
 
@@ -261,58 +267,6 @@ public struct PlayerTransferCommand : INetworkEntityCopyRpcCommand
     public uint playerId;
     public PlayerManager.LocalPlayerSide localPlayerSide;
     public float3 position;
-
-    public void Serialize(ref DataStreamWriter writer)
-    {
-        writer.WriteInt(networkId);
-        writer.WriteULong(networkEntityId);
-        writer.WriteUInt(playerId);
-        writer.WriteByte((byte) localPlayerSide);
-
-        writer.WriteFloat(position.x);
-        writer.WriteFloat(position.y);
-        writer.WriteFloat(position.z);
-    }
-
-    public void Deserialize(ref DataStreamReader reader)
-    {
-        networkId = reader.ReadInt();
-        networkEntityId = reader.ReadULong();
-        playerId = reader.ReadUInt();
-        localPlayerSide = (PlayerManager.LocalPlayerSide) reader.ReadByte();
-
-        position = new float3(
-            reader.ReadFloat(),
-            reader.ReadFloat(),
-            reader.ReadFloat()
-        );
-    }
-
-    #region Implementation
-
-    public PortableFunctionPointer<RpcExecutor.ExecuteDelegate> CompileExecute()
-    {
-        return INVOKE_EXECUTE_FUNCTION_POINTER;
-    }
-
-    [BurstCompile]
-    private static void InvokeExecute(ref RpcExecutor.Parameters parameters)
-    {
-        RpcExecutor.ExecuteCreateRequestComponent<PlayerTransferCommand>(ref parameters);
-    }
-
-    private static readonly PortableFunctionPointer<RpcExecutor.ExecuteDelegate> INVOKE_EXECUTE_FUNCTION_POINTER =
-        new PortableFunctionPointer<RpcExecutor.ExecuteDelegate>(InvokeExecute);
-
-    #endregion
-
-    #region Sender
-
-    public class CopyPlayerCommandSender : RpcCommandRequestSystem<PlayerTransferCommand>
-    {
-    }
-
-    #endregion
 }
 ```
 
@@ -335,6 +289,8 @@ public class ServerPlayerTransferSystem : AServerNetworkEntityTransferSystem<Ser
     }
 }
 ```
+
+There are also options for selection more components (2 and 3), such as `AServerNetworkEntityTransferSystemT2` and `AServerNetworkEntityTransferSystemT3`.
 
 ### Creating the entity on the client side
 
@@ -468,20 +424,10 @@ namespace Entities.Players.Packets
         }
     }
 
-    public class VelocityRpcCommandSender : RpcCommandRequestSystem<CopyEntityComponentRpcCommand<Velocity, VelocityConverter>>
+    public class VelocityRpcCommandSender : RpcCommandSendSystem<
+        CopyEntityComponentRpcCommand<Velocity, VelocityConverter>,
+        CopyEntityComponentRpcCommand<Velocity, VelocityConverter>>
     {
-    }
-
-    public class VelocityServerSyncSystem : ServerSyncComponentSystem<Velocity, VelocityConverter>
-    {
-    }
-
-    public class VelocityClientSyncSystem : ClientSyncComponentSystem<Velocity, VelocityConverter>
-    {
-        protected override bool ShouldApply(Entity entity, ref CopyEntityComponentRpcCommand<Velocity, VelocityConverter> command)
-        {
-            return !EntityManager.HasComponent<LocalPlayer>(entity);
-        }
     }
 }
 ```
