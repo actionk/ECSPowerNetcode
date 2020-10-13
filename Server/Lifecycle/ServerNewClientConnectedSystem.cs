@@ -25,7 +25,7 @@ namespace Plugins.ECSPowerNetcode.Server.Lifecycle
                         .SetName($"ClientConnection_{networkIdComponent.Value}");
 
                     var connectionCommandHandler = EntityWrapper.CreateEntity(EntityManager)
-                        .AddComponent<ServerToClientCommandHandler>()
+                        .AddComponentData(new ServerToClientCommandHandler {connectionEntity = connectionEntity})
                         .SetName($"ClientConnection_{networkIdComponent.Value}_CommandBuffer")
                         .Entity;
 
