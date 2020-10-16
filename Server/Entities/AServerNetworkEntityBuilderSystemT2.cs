@@ -13,7 +13,8 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
         where TSelector2 : struct, IComponentData
         where TCommand : struct, INetworkEntityCopyRpcCommand
     {
-        protected abstract TCommand CreateTransferCommandForEntity(Entity entity, NetworkEntity networkEntity, ref TSelector selectorComponent, ref TSelector2 selectorComponent2);
+        protected abstract TCommand CreateTransferCommandForEntity(Entity entity, ref NetworkEntity networkEntity, ref TSelector selectorComponent,
+            ref TSelector2 selectorComponent2);
 
         protected override void OnUpdate()
         {
@@ -21,7 +22,7 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 .WithAll<TSelector, TSelector2, NetworkEntity, NetworkEntityRegistered, TransferNetworkEntityToAllClients>()
                 .ForEach((Entity entity, ref NetworkEntity networkEntity, ref TSelector selectorComponent, ref TSelector2 selectorComponent2) =>
                 {
-                    var command = CreateTransferCommandForEntity(entity, networkEntity, ref selectorComponent, ref selectorComponent2);
+                    var command = CreateTransferCommandForEntity(entity, ref networkEntity, ref selectorComponent, ref selectorComponent2);
                     ServerToClientRpcCommandBuilder
                         .Broadcast(command)
                         .Build(PostUpdateCommands);
@@ -34,7 +35,7 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 .ForEach((Entity entity, DynamicBuffer<TransferNetworkEntityToClient> clients, ref NetworkEntity networkEntity, ref TSelector selectorComponent,
                     ref TSelector2 selectorComponent2) =>
                 {
-                    var command = CreateTransferCommandForEntity(entity, networkEntity, ref selectorComponent, ref selectorComponent2);
+                    var command = CreateTransferCommandForEntity(entity, ref networkEntity, ref selectorComponent, ref selectorComponent2);
                     foreach (var clientEntity in clients)
                     {
                         ServerToClientRpcCommandBuilder
