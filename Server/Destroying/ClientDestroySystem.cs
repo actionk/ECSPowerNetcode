@@ -9,7 +9,7 @@ namespace Plugins.ECSPowerNetcode.Server.Destroying
     {
         protected override void OnCommand(ref ServerNetworkEntityDestroyCommand packet, ConnectionDescription connectionToServer)
         {
-            var networkEntity = ClientManager.Instance.NetworkEntityManager.GetEntityByNetworkEntityId(packet.networkEntityId);
+            var networkEntity = ClientManager.Instance.NetworkEntityManager.TryGetEntityByNetworkEntityId(packet.networkEntityId);
             if (networkEntity == Entity.Null)
                 return;
 

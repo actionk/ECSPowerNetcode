@@ -6,7 +6,7 @@ namespace Plugins.ECSPowerNetcode.Shared
     public interface INetworkEntityManager
     {
         void Add(uint networkEntityId, Entity entity);
-        Entity GetEntityByNetworkEntityId(uint networkEntityId);
+        Entity TryGetEntityByNetworkEntityId(uint networkEntityId);
         bool Remove(uint networkEntityId);
 
         Dictionary<uint, Entity> All { get; }

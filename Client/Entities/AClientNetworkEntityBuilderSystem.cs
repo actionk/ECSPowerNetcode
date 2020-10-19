@@ -19,7 +19,7 @@ namespace Plugins.ECSPowerNetcode.Client.Entities
                 {
                     //Debug.Log($"[Client] Creating a client entity [{GetType()}] with id {command.NetworkEntityId}");
 
-                    var existingEntity = ClientManager.Instance.NetworkEntityManager.GetEntityByNetworkEntityId(command.NetworkEntityId);
+                    var existingEntity = ClientManager.Instance.NetworkEntityManager.TryGetEntityByNetworkEntityId(command.NetworkEntityId);
                     if (existingEntity != Entity.Null)
                         SynchronizeNetworkEntity(existingEntity, command);
                     else

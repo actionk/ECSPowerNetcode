@@ -21,7 +21,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
             Entities
                 .ForEach((Entity entity, ref CopyEntityComponentRpcCommand<TComponent, TConverter> command, ref ReceiveRpcCommandRequestComponent requestComponent) =>
                 {
-                    var networkEntity = ClientManager.Instance.NetworkEntityManager.GetEntityByNetworkEntityId(command.networkEntityId);
+                    var networkEntity = ClientManager.Instance.NetworkEntityManager.TryGetEntityByNetworkEntityId(command.networkEntityId);
                     if (networkEntity == Entity.Null)
                     {
                         Debug.LogWarning($"Entity with networkEntityId {command.networkEntityId} doesn't exist");
