@@ -1,14 +1,15 @@
 using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Plugins.ECSPowerNetcode.Server.Groups;
 using Plugins.ECSPowerNetcode.Server.Packets;
-using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 
 namespace Plugins.ECSPowerNetcode.Server.Destroying
 {
     [UpdateInGroup(typeof(ServerCleanupSystemGroup))]
-    public class ServerDestroySystem : ComponentSystem
+    public abstract class AServerNetworkEntityDestroySystem : ComponentSystem
     {
+        protected abstract void OnDestroyEntity(uint networkEntityId, Entity entity);
+
         protected override void OnUpdate()
         {
             Entities
@@ -21,7 +22,7 @@ namespace Plugins.ECSPowerNetcode.Server.Destroying
                         })
                         .Build(PostUpdateCommands);
 
-                    PostUpdateCommands.DestroyEntity(entity);
+                    OnDestroyEntity(networkEntity.networkEntityId, entity);
                 });
 
 
