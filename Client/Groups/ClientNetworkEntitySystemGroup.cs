@@ -4,8 +4,7 @@ using Unity.Transforms;
 
 namespace Plugins.ECSPowerNetcode.Client.Groups
 {
-    [UpdateInGroup(typeof(ClientSimulationSystemGroup))]
-    [UpdateAfter(typeof(ClientRequestProcessingSystemGroup))]
+    [UpdateInGroup(typeof(ClientInitializationSystemGroup))]
     [UpdateBefore(typeof(TransformSystemGroup))]
     public class ClientNetworkEntitySystemGroup : ComponentSystemGroup
     {
