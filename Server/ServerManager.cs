@@ -19,6 +19,8 @@ namespace Plugins.ECSPowerNetcode.Server
         public event OnPlayerConnected OnPlayerConnectedHandler;
         public event OnPlayerDisconnected OnPlayerDisconnectedHandler;
 
+        public uint Tick => EntityWorldManager.Instance.ServerTick;
+
         public INetworkEntityManager NetworkEntityManager { get; set; } = new DefaultNetworkEntityManager();
         public INetworkEntityIdFactory NetworkEntityIdFactory { get; set; } = new DefaultNetworkEntityIdFactory();
         public uint NextNetworkEntityId => NetworkEntityIdFactory.NextId();
@@ -62,7 +64,7 @@ namespace Plugins.ECSPowerNetcode.Server
 
         public List<ConnectionDescription> AllConnections => m_openedConnectionsById.Values.ToList();
 
-        #region Singleton
+#region Singleton
 
         private static ServerManager INSTANCE = new ServerManager();
 
@@ -88,6 +90,6 @@ namespace Plugins.ECSPowerNetcode.Server
         }
 #endif
 
-        #endregion
+#endregion
     }
 }
