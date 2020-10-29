@@ -1,7 +1,10 @@
+using System;
+using Plugins.ECSPowerNetcode.Server.Exceptions;
 using Plugins.ECSPowerNetcode.Server.Groups;
 using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 using Unity.NetCode;
+using UnityEngine;
 
 namespace Plugins.ECSPowerNetcode.Server.Packets
 {
@@ -22,7 +25,19 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
                     if (ShouldDestroyEntity)
                         PostUpdateCommands.DestroyEntity(entity);
 
-                    OnCommand(ref command, clientConnection);
+                    try
+                    {
+                        OnCommand(ref command, clientConnection);
+                    }
+                    catch (ServerException e)
+                    {
+                        Debug.LogWarning($"{GetType()} Expected server error: {e.Message}");
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"{GetType()} Unexpected server error: {e.Message}");
+                        Debug.LogException(e);
+                    }
                 });
         }
     }
