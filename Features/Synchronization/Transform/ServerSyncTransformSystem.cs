@@ -39,13 +39,17 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         [BurstCompile]
         struct UpdateJob : IJobChunk
         {
-            [ReadOnly] public ComponentTypeHandle<NetworkEntity> NetworkEntity;
+            [ReadOnly]
+            public ComponentTypeHandle<NetworkEntity> NetworkEntity;
 
-            [ReadOnly] public ComponentTypeHandle<Translation> TranslationType;
+            [ReadOnly]
+            public ComponentTypeHandle<Translation> TranslationType;
 
-            [ReadOnly] public ComponentTypeHandle<Rotation> RotationType;
+            [ReadOnly]
+            public ComponentTypeHandle<Rotation> RotationType;
 
-            [ReadOnly] public ComponentTypeHandle<Scale> ScaleType;
+            [ReadOnly]
+            public ComponentTypeHandle<Scale> ScaleType;
 
             public NativeQueue<SyncTransformFromServerToClientCommand>.ParallelWriter Commands;
 
@@ -76,9 +80,13 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         {
             public BufferTypeHandle<OutgoingRpcDataStreamBufferComponent> OutgoingRpcDataStreamBufferComponent;
 
+            [ReadOnly]
+            public ComponentDataFromEntity<GhostComponent> GhostComponent;
+
             public RpcQueue<SyncTransformFromServerToClientCommand, SyncTransformFromServerToClientCommand> RpcQueue;
 
-            [ReadOnly] public NativeQueue<SyncTransformFromServerToClientCommand> Commands;
+            [ReadOnly]
+            public NativeQueue<SyncTransformFromServerToClientCommand> Commands;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
@@ -90,7 +98,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
                 {
                     for (var i = 0; i < count; i++)
                     {
-                        RpcQueue.Schedule(chunkConnections[i], command);
+                        RpcQueue.Schedule(chunkConnections[i], GhostComponent, command);
                     }
                 }
             }
@@ -113,6 +121,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
             {
                 RpcQueue = m_rpcQueue,
                 Commands = commandsToSend,
+                GhostComponent = GetComponentDataFromEntity<GhostComponent>(true),
                 OutgoingRpcDataStreamBufferComponent = GetBufferTypeHandle<OutgoingRpcDataStreamBufferComponent>()
             };
             var sendJobDependency = sendJob.Schedule(m_connectionsQuery, updateJobDependency);

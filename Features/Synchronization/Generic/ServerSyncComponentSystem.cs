@@ -40,9 +40,11 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
         [BurstCompile]
         struct UpdateJob : IJobChunk
         {
-            [ReadOnly] public ComponentTypeHandle<NetworkEntity> NetworkEntity;
+            [ReadOnly]
+            public ComponentTypeHandle<NetworkEntity> NetworkEntity;
 
-            [ReadOnly] public ComponentTypeHandle<TComponent> Component;
+            [ReadOnly]
+            public ComponentTypeHandle<TComponent> Component;
 
             public NativeQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>>.ParallelWriter Commands;
 
@@ -74,7 +76,11 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
 
             public RpcQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>, CopyEntityComponentRpcCommand<TComponent, TConverter>> RpcQueue;
 
-            [ReadOnly] public NativeQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>> Commands;
+            [ReadOnly]
+            public ComponentDataFromEntity<GhostComponent> GhostComponent;
+
+            [ReadOnly]
+            public NativeQueue<CopyEntityComponentRpcCommand<TComponent, TConverter>> Commands;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
             {
@@ -86,7 +92,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
                 {
                     for (var i = 0; i < count; i++)
                     {
-                        RpcQueue.Schedule(chunkConnections[i], command);
+                        RpcQueue.Schedule(chunkConnections[i], GhostComponent, command);
                     }
                 }
             }
@@ -101,15 +107,16 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
                 Component = GetComponentTypeHandle<TComponent>(true),
                 Commands = commandsToSend.AsParallelWriter()
             };
-            var updateJobDependency = updateJob.Schedule(m_updatedComponentsQuery, inputDeps);
+            var updateJobDependency = JobChunkExtensions.Schedule(updateJob, m_updatedComponentsQuery, inputDeps);
 
             var sendJob = new SendJob
             {
                 RpcQueue = m_rpcQueue,
                 Commands = commandsToSend,
+                GhostComponent = GetComponentDataFromEntity<GhostComponent>(true),
                 OutgoingRpcDataStreamBufferComponent = GetBufferTypeHandle<OutgoingRpcDataStreamBufferComponent>()
             };
-            var sendJobDependency = sendJob.Schedule(m_connectionsQuery, updateJobDependency);
+            var sendJobDependency = JobChunkExtensions.Schedule(sendJob, m_connectionsQuery, updateJobDependency);
             commandsToSend.Dispose(sendJobDependency);
             return sendJobDependency;
         }

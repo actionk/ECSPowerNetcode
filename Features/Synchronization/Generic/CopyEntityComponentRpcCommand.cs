@@ -12,23 +12,23 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
         public uint networkEntityId;
         public TConverter component;
 
-        #region Serialization
+#region Serialization
 
-        public void Serialize(ref DataStreamWriter writer, in CopyEntityComponentRpcCommand<TComponent, TConverter> data)
+        public void Serialize(ref DataStreamWriter writer, in RpcSerializerState state, in CopyEntityComponentRpcCommand<TComponent, TConverter> data)
         {
             writer.WriteUInt(data.networkEntityId);
             data.component.Serialize(ref writer);
         }
 
-        public void Deserialize(ref DataStreamReader reader, ref CopyEntityComponentRpcCommand<TComponent, TConverter> data)
+        public void Deserialize(ref DataStreamReader reader, in RpcDeserializerState state, ref CopyEntityComponentRpcCommand<TComponent, TConverter> data)
         {
             data.networkEntityId = reader.ReadUInt();
             data.component.Deserialize(ref reader);
         }
 
-        #endregion
+#endregion
 
-        #region Implementation
+#region Implementation
 
         public PortableFunctionPointer<RpcExecutor.ExecuteDelegate> CompileExecute()
         {
@@ -44,6 +44,6 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
         private static readonly PortableFunctionPointer<RpcExecutor.ExecuteDelegate> INVOKE_EXECUTE_FUNCTION_POINTER =
             new PortableFunctionPointer<RpcExecutor.ExecuteDelegate>(InvokeExecute);
 
-        #endregion
+#endregion
     }
 }

@@ -16,9 +16,9 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         public quaternion rotation;
         public float scale;
 
-        #region Serialization
+#region Serialization
 
-        public void Serialize(ref DataStreamWriter writer, in SyncTransformFromServerToClientCommand data)
+        public void Serialize(ref DataStreamWriter writer, in RpcSerializerState state, in SyncTransformFromServerToClientCommand data)
         {
             writer.WriteUInt(data.tick);
             writer.WriteUInt(data.networkEntityId);
@@ -35,7 +35,7 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
             writer.WriteFloat(data.scale);
         }
 
-        public void Deserialize(ref DataStreamReader reader, ref SyncTransformFromServerToClientCommand data)
+        public void Deserialize(ref DataStreamReader reader, in RpcDeserializerState state, ref SyncTransformFromServerToClientCommand data)
         {
             data.tick = reader.ReadUInt();
             data.networkEntityId = reader.ReadUInt();
@@ -54,9 +54,9 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
             data.scale = reader.ReadFloat();
         }
 
-        #endregion
+#endregion
 
-        #region Implementation
+#region Implementation
 
         public PortableFunctionPointer<RpcExecutor.ExecuteDelegate> CompileExecute()
         {
@@ -72,14 +72,14 @@ namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
         private static readonly PortableFunctionPointer<RpcExecutor.ExecuteDelegate> INVOKE_EXECUTE_FUNCTION_POINTER =
             new PortableFunctionPointer<RpcExecutor.ExecuteDelegate>(InvokeExecute);
 
-        #endregion
+#endregion
 
-        #region Sender
+#region Sender
 
         public class ServerCopyTransformSendSystem : RpcCommandSendSystem<SyncTransformFromServerToClientCommand, SyncTransformFromServerToClientCommand>
         {
         }
 
-        #endregion
+#endregion
     }
 }
