@@ -8,6 +8,7 @@ using UnityEngine;
 namespace Plugins.ECSPowerNetcode.Server.Lifecycle
 {
     [UpdateInGroup(typeof(ServerConnectionSystemGroup))]
+    [UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
     public class ServerStartSystem : ComponentSystem
     {
         protected override void OnCreate()

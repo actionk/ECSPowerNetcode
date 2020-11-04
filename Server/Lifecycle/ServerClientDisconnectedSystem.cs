@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Plugins.ECSPowerNetcode.Server.Lifecycle
 {
     [UpdateInGroup(typeof(ServerConnectionSystemGroup))]
+    [UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
     public class ServerClientDisconnectedSystem : ComponentSystem
     {
         protected override void OnUpdate()

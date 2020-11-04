@@ -1,10 +1,12 @@
 using Plugins.ECSPowerNetcode.Client.Groups;
 using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 using Unity.Entities;
+using Unity.NetCode;
 
 namespace Plugins.ECSPowerNetcode.Client.Entities
 {
     [UpdateInGroup(typeof(ClientNetworkEntitySystemGroup))]
+    [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]
     public class ClientNetworkEntitySystem : ComponentSystem
     {
         protected override void OnUpdate()

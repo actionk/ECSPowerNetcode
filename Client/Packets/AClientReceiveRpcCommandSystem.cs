@@ -6,6 +6,7 @@ using Unity.NetCode;
 namespace Plugins.ECSPowerNetcode.Client.Packets
 {
     [UpdateInGroup(typeof(ClientRequestProcessingSystemGroup))]
+    [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]
     public abstract class AClientReceiveRpcCommandSystem<T> : ComponentSystem where T : struct, IComponentData
     {
         protected virtual bool ShouldDestroyEntity { get; } = true;

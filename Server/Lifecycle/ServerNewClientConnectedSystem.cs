@@ -10,6 +10,7 @@ namespace Plugins.ECSPowerNetcode.Server.Lifecycle
 {
     [UpdateInGroup(typeof(ServerConnectionSystemGroup))]
     [UpdateAfter(typeof(ServerStartSystem))]
+    [UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
     public class ServerNewClientConnectedSystem : ComponentSystem
     {
         protected override void OnUpdate()

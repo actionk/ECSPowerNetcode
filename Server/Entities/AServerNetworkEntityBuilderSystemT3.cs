@@ -4,10 +4,12 @@ using Plugins.ECSPowerNetcode.Server.Components;
 using Plugins.ECSPowerNetcode.Server.Groups;
 using Plugins.ECSPowerNetcode.Server.Packets;
 using Unity.Entities;
+using Unity.NetCode;
 
 namespace Plugins.ECSPowerNetcode.Server.Entities
 {
     [UpdateInGroup(typeof(ServerRequestProcessingSystemGroup))]
+    [UpdateInWorld(UpdateInWorld.TargetWorld.Server)]
     public abstract class AServerNetworkEntityBuilderSystemT3<TSelector, TSelector2, TSelector3, TCommand> : ComponentSystem
         where TSelector : struct, IComponentData
         where TSelector2 : struct, IComponentData

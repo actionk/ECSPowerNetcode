@@ -6,6 +6,7 @@ using Unity.NetCode;
 namespace Plugins.ECSPowerNetcode.Client.Entities
 {
     [UpdateInGroup(typeof(ClientRequestProcessingSystemGroup))]
+    [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]
     public abstract class AClientNetworkEntityBuilderSystem<TCommand> : ComponentSystem
         where TCommand : struct, INetworkEntityCopyRpcCommand
     {
