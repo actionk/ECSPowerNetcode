@@ -1,9 +1,6 @@
 ﻿using Plugins.Shared.ECSPowerNetcode.Worlds;
 using Unity.Entities;
 using Unity.NetCode;
-using UnityEditor.UIElements;
-
-[assembly: UxmlNamespacePrefix("Plugins.ECSPowerNetcode", "first")]
 
 namespace Plugins.Shared.ECSPowerNetcode
 {
