@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Plugins.Shared.ECSEntityBuilder.Archetypes;
-using Plugins.Shared.ECSPowerNetcode.Worlds;
+using Plugins.ECSEntityBuilder.Archetypes;
+using Plugins.ECSPowerNetcode.Worlds;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Plugins.Shared.ECSPowerNetcode.Archetypes
+namespace Plugins.ECSPowerNetcode.Archetypes
 {
     public class NetcodeEntityArchetypeManager
     {

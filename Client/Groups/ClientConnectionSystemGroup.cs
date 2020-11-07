@@ -2,7 +2,7 @@ using Unity.Entities;
 using Unity.NetCode;
 using Unity.Transforms;
 
-namespace Plugins.Shared.ECSPowerNetcode.Client.Groups
+namespace Plugins.ECSPowerNetcode.Client.Groups
 {
     [UpdateInGroup(typeof(ClientSimulationSystemGroup))]
     [UpdateBefore(typeof(TransformSystemGroup))]

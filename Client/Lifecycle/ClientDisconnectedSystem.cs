@@ -1,9 +1,9 @@
-using Plugins.Shared.ECSPowerNetcode.Client.Groups;
+using Plugins.ECSPowerNetcode.Client.Groups;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-namespace Plugins.Shared.ECSPowerNetcode.Client.Lifecycle
+namespace Plugins.ECSPowerNetcode.Client.Lifecycle
 {
     [UpdateInGroup(typeof(ClientConnectionSystemGroup))]
     public class ClientDisconnectedSystem : ComponentSystem

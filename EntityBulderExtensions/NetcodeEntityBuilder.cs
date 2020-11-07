@@ -1,9 +1,9 @@
-﻿using Plugins.Shared.ECSEntityBuilder;
-using Plugins.Shared.ECSEntityBuilder.Archetypes;
-using Plugins.Shared.ECSPowerNetcode.Worlds;
+﻿using Plugins.ECSEntityBuilder;
+using Plugins.ECSEntityBuilder.Archetypes;
+using Plugins.ECSPowerNetcode.Worlds;
 using Unity.Entities;
 
-namespace Plugins.Shared.ECSPowerNetcode.EntityBulderExtensions
+namespace Plugins.ECSPowerNetcode.EntityBulderExtensions
 {
     public class NetcodeEntityBuilder : EntityBuilder
     {

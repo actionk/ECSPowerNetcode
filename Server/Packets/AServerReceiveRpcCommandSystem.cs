@@ -1,12 +1,12 @@
 using System;
-using Plugins.Shared.ECSPowerNetcode.Server.Exceptions;
-using Plugins.Shared.ECSPowerNetcode.Server.Groups;
-using Plugins.Shared.ECSPowerNetcode.Shared;
+using Plugins.ECSPowerNetcode.Server.Exceptions;
+using Plugins.ECSPowerNetcode.Server.Groups;
+using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-namespace Plugins.Shared.ECSPowerNetcode.Server.Packets
+namespace Plugins.ECSPowerNetcode.Server.Packets
 {
     [UpdateInGroup(typeof(ServerRequestProcessingSystemGroup))]
     public abstract class AServerReceiveRpcCommandSystem<T> : ComponentSystem where T : struct, IComponentData

@@ -1,12 +1,12 @@
-using Plugins.Shared.ECSEntityBuilder;
-using Plugins.Shared.ECSEntityBuilder.Archetypes;
-using Plugins.Shared.ECSEntityBuilder.InstantiationStrategy;
-using Plugins.Shared.ECSEntityBuilder.Variables;
-using Plugins.Shared.ECSPowerNetcode.Archetypes;
-using Plugins.Shared.ECSPowerNetcode.Worlds;
+using Plugins.ECSEntityBuilder;
+using Plugins.ECSEntityBuilder.Archetypes;
+using Plugins.ECSEntityBuilder.InstantiationStrategy;
+using Plugins.ECSEntityBuilder.Variables;
+using Plugins.ECSPowerNetcode.Archetypes;
+using Plugins.ECSPowerNetcode.Worlds;
 using Unity.Entities;
 
-namespace Plugins.Shared.ECSPowerNetcode.EntityBulderExtensions
+namespace Plugins.ECSPowerNetcode.EntityBulderExtensions
 {
     public class CreateFromNetcodeArchetypeStrategy<T> : IEntityCreationStrategy where T : IArchetypeDescriptor
     {

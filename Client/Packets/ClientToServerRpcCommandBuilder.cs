@@ -1,8 +1,8 @@
-using Plugins.Shared.ECSPowerNetcode.EntityBulderExtensions;
+using Plugins.ECSPowerNetcode.EntityBulderExtensions;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.Shared.ECSPowerNetcode.Client.Packets
+namespace Plugins.ECSPowerNetcode.Client.Packets
 {
     public class ClientToServerRpcCommandBuilder : NetcodeEntityBuilder
     {

@@ -1,9 +1,9 @@
-using Plugins.Shared.ECSPowerNetcode.Features.NetworkEntities;
-using Plugins.Shared.ECSPowerNetcode.Server.Groups;
+using Plugins.ECSPowerNetcode.Features.NetworkEntities;
+using Plugins.ECSPowerNetcode.Server.Groups;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.Shared.ECSPowerNetcode.Server.Entities
+namespace Plugins.ECSPowerNetcode.Server.Entities
 {
     [UpdateInGroup(typeof(ServerNetworkEntitySystemGroup))]
     [UpdateInWorld(UpdateInWorld.TargetWorld.Server)]

@@ -1,7 +1,7 @@
 using Unity.Burst;
 using Unity.NetCode;
 
-namespace Plugins.Shared.ECSPowerNetcode.Features.ManagedRpcCommands
+namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
 {
     [BurstCompile]
     public struct ManagedRpcCommandResult : IRpcCommand

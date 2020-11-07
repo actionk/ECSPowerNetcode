@@ -1,7 +1,7 @@
 using Unity.Burst;
 using Unity.NetCode;
 
-namespace Plugins.Shared.ECSPowerNetcode.Server.Destroying
+namespace Plugins.ECSPowerNetcode.Server.Destroying
 {
     [BurstCompile]
     public struct ServerNetworkEntityDestroyCommand : IRpcCommand

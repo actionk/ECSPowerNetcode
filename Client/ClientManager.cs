@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using Plugins.Shared.ECSPowerNetcode.Client.Components;
-using Plugins.Shared.ECSPowerNetcode.Shared;
-using Plugins.Shared.ECSPowerNetcode.Utils;
-using Plugins.Shared.ECSPowerNetcode.Worlds;
+using Plugins.ECSPowerNetcode.Client.Components;
+using Plugins.ECSPowerNetcode.Shared;
+using Plugins.ECSPowerNetcode.Utils;
+using Plugins.ECSPowerNetcode.Worlds;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-namespace Plugins.Shared.ECSPowerNetcode.Client
+namespace Plugins.ECSPowerNetcode.Client
 {
     public class ClientManager
     {

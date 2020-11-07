@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Plugins.Shared.ECSPowerNetcode.Server.Components
+namespace Plugins.ECSPowerNetcode.Server.Components
 {
     public struct TransferNetworkEntityToClient : IBufferElementData
     {

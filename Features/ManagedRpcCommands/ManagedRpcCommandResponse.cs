@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Plugins.Shared.ECSPowerNetcode.Features.ManagedRpcCommands
+namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
 {
     public struct ManagedRpcCommandResponse : IComponentData
     {

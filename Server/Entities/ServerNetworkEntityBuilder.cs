@@ -1,7 +1,7 @@
-using Plugins.Shared.ECSPowerNetcode.EntityBulderExtensions;
-using Plugins.Shared.ECSPowerNetcode.Features.NetworkEntities;
+using Plugins.ECSPowerNetcode.EntityBulderExtensions;
+using Plugins.ECSPowerNetcode.Features.NetworkEntities;
 
-namespace Plugins.Shared.ECSPowerNetcode.Server.Entities
+namespace Plugins.ECSPowerNetcode.Server.Entities
 {
     public abstract class ServerNetworkEntityBuilder : NetcodeEntityBuilder
     {

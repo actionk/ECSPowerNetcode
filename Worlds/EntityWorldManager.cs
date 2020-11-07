@@ -4,7 +4,7 @@ using Unity.NetCode;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Plugins.Shared.ECSPowerNetcode.Worlds
+namespace Plugins.ECSPowerNetcode.Worlds
 {
     public class EntityWorldManager
     {

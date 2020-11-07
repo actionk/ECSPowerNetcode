@@ -1,8 +1,8 @@
-﻿using Plugins.Shared.ECSPowerNetcode.Worlds;
+﻿using Plugins.ECSPowerNetcode.Worlds;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.Shared.ECSPowerNetcode
+namespace Plugins.ECSPowerNetcode
 {
     public class Bootstrap : ClientServerBootstrap
     {

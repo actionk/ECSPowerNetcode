@@ -1,7 +1,7 @@
 ﻿using System;
-using Plugins.Shared.ECSPowerNetcode.Worlds;
+using Plugins.ECSPowerNetcode.Worlds;
 
-namespace Plugins.Shared.ECSPowerNetcode.Archetypes
+namespace Plugins.ECSPowerNetcode.Archetypes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class NetcodeArchetypeAttribute : Attribute

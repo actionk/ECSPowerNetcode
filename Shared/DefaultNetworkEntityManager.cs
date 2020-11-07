@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Unity.Entities;
 
-namespace Plugins.Shared.ECSPowerNetcode.Shared
+namespace Plugins.ECSPowerNetcode.Shared
 {
     public class DefaultNetworkEntityManager : INetworkEntityManager
     {

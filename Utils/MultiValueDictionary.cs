@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Plugins.Shared.ECSPowerNetcode.Utils
+namespace Plugins.ECSPowerNetcode.Utils
 {
     /// <summary>
     /// Extension to the normal Dictionary. This class can store more than one value for every key. It keeps a HashSet for every Key value.

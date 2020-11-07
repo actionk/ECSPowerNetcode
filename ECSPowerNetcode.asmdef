@@ -1,5 +1,6 @@
 {
     "name": "ECSPowerNetcode",
+    "rootNamespace": "",
     "references": [
         "GUID:2665a8d13d1b3f18800f46e256720795",
         "GUID:e0cd26848372d4e5c891c569017e11f1",
@@ -12,7 +13,6 @@
         "GUID:44dcb2bf5b9be4b5aa76674c8edcd1d5",
         "GUID:b302dc12629081840aafa9de750c41e0"
     ],
-    "rootNamespace": "Plugins.ECSPowerNetcode",
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

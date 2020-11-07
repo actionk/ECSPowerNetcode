@@ -1,10 +1,10 @@
-using Plugins.Shared.ECSPowerNetcode.Client.Packets;
-using Plugins.Shared.ECSPowerNetcode.Server.Destroying;
-using Plugins.Shared.ECSPowerNetcode.Shared;
+using Plugins.ECSPowerNetcode.Client.Packets;
+using Plugins.ECSPowerNetcode.Server.Destroying;
+using Plugins.ECSPowerNetcode.Shared;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.Shared.ECSPowerNetcode.Client.Entities
+namespace Plugins.ECSPowerNetcode.Client.Entities
 {
     [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]
     public abstract class AClientNetworkEntityDestroySystem : AClientReceiveRpcCommandSystem<ServerNetworkEntityDestroyCommand>

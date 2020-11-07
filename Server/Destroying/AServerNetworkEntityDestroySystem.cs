@@ -1,9 +1,9 @@
-using Plugins.Shared.ECSPowerNetcode.Features.NetworkEntities;
-using Plugins.Shared.ECSPowerNetcode.Server.Groups;
-using Plugins.Shared.ECSPowerNetcode.Server.Packets;
+using Plugins.ECSPowerNetcode.Features.NetworkEntities;
+using Plugins.ECSPowerNetcode.Server.Groups;
+using Plugins.ECSPowerNetcode.Server.Packets;
 using Unity.Entities;
 
-namespace Plugins.Shared.ECSPowerNetcode.Server.Destroying
+namespace Plugins.ECSPowerNetcode.Server.Destroying
 {
     [UpdateInGroup(typeof(ServerCleanupSystemGroup))]
     public abstract class AServerNetworkEntityDestroySystem : ComponentSystem

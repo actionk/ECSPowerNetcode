@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Plugins.Shared.ECSPowerNetcode.Client.Components
+namespace Plugins.ECSPowerNetcode.Client.Components
 {
     public struct ClientToServerCommandHandler : IComponentData
     {

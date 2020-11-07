@@ -1,8 +1,8 @@
-﻿using Plugins.Shared.ECSEntityBuilder;
-using Plugins.Shared.ECSPowerNetcode.Worlds;
+﻿using Plugins.ECSEntityBuilder;
+using Plugins.ECSPowerNetcode.Worlds;
 using Unity.Entities;
 
-namespace Plugins.Shared.ECSPowerNetcode.EntityBulderExtensions
+namespace Plugins.ECSPowerNetcode.EntityBulderExtensions
 {
     public static class NetcodeEntityWrapper
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.Collections;
 
-namespace Plugins.Shared.ECSPowerNetcode.Extensions
+namespace Plugins.ECSPowerNetcode.Extensions
 {
     public static class CollectionExtension
     {

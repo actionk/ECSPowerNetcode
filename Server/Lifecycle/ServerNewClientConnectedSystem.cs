@@ -1,12 +1,12 @@
-using Plugins.Shared.ECSEntityBuilder;
-using Plugins.Shared.ECSPowerNetcode.Server.Components;
-using Plugins.Shared.ECSPowerNetcode.Server.Groups;
-using Plugins.Shared.ECSPowerNetcode.Shared.Components;
+using Plugins.ECSEntityBuilder;
+using Plugins.ECSPowerNetcode.Server.Components;
+using Plugins.ECSPowerNetcode.Server.Groups;
+using Plugins.ECSPowerNetcode.Shared.Components;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-namespace Plugins.Shared.ECSPowerNetcode.Server.Lifecycle
+namespace Plugins.ECSPowerNetcode.Server.Lifecycle
 {
     [UpdateInGroup(typeof(ServerConnectionSystemGroup))]
     [UpdateAfter(typeof(ServerStartSystem))]

@@ -1,6 +1,6 @@
 using System;
 
-namespace Plugins.Shared.ECSPowerNetcode.Server.Exceptions
+namespace Plugins.ECSPowerNetcode.Server.Exceptions
 {
     public class ClientConnectionNotFoundException : Exception
     {

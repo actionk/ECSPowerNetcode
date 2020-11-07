@@ -1,7 +1,7 @@
 ﻿using Unity.Core;
 using UnityEngine;
 
-namespace Plugins.Shared.ECSPowerNetcode.Extensions
+namespace Plugins.ECSPowerNetcode.Extensions
 {
     public static class TimeExtensions
     {

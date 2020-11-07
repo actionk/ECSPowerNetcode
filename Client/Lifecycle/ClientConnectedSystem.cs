@@ -1,11 +1,11 @@
-using Plugins.Shared.ECSEntityBuilder;
-using Plugins.Shared.ECSPowerNetcode.Client.Components;
-using Plugins.Shared.ECSPowerNetcode.Client.Groups;
+using Plugins.ECSEntityBuilder;
+using Plugins.ECSPowerNetcode.Client.Components;
+using Plugins.ECSPowerNetcode.Client.Groups;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-namespace Plugins.Shared.ECSPowerNetcode.Client.Lifecycle
+namespace Plugins.ECSPowerNetcode.Client.Lifecycle
 {
     [UpdateInGroup(typeof(ClientConnectionSystemGroup))]
     [UpdateAfter(typeof(ClientConnectToServerSystem))]

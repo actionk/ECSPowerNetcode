@@ -1,7 +1,7 @@
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.Shared.ECSPowerNetcode.Client.Groups
+namespace Plugins.ECSPowerNetcode.Client.Groups
 {
     [UpdateInGroup(typeof(ClientInitializationSystemGroup))]
     public class ClientNetworkEntitySystemGroup : ComponentSystemGroup
