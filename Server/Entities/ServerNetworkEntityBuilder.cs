@@ -1,9 +1,9 @@
-using Plugins.Shared.ECSEntityBuilder;
+using Plugins.Shared.ECSPowerNetcode.EntityBulderExtensions;
 using Plugins.Shared.ECSPowerNetcode.Features.NetworkEntities;
 
 namespace Plugins.Shared.ECSPowerNetcode.Server.Entities
 {
-    public abstract class ServerNetworkEntityBuilder<T> : EntityBuilder<T> where T : EntityBuilder<T>
+    public abstract class ServerNetworkEntityBuilder : NetcodeEntityBuilder
     {
         public uint NetworkEntityId { get; }
 

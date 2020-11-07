@@ -1,10 +1,10 @@
 using System;
-using Plugins.Shared.ECSEntityBuilder;
+using Plugins.Shared.ECSPowerNetcode.EntityBulderExtensions;
 using Plugins.Shared.ECSPowerNetcode.Features.NetworkEntities;
 
 namespace Plugins.Shared.ECSPowerNetcode.Client.Entities
 {
-    public abstract class ClientNetworkEntityBuilder<T> : EntityBuilder<T> where T : EntityBuilder<T>
+    public abstract class ClientNetworkEntityBuilder : NetcodeEntityBuilder
     {
         protected ClientNetworkEntityBuilder(uint networkEntityId)
         {
