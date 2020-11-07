@@ -1,12 +1,12 @@
-using Plugins.ECSPowerNetcode.Features.NetworkEntities;
-using Plugins.ECSPowerNetcode.Server.Groups;
+using Plugins.Shared.ECSPowerNetcode.Features.NetworkEntities;
+using Plugins.Shared.ECSPowerNetcode.Server.Groups;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.NetCode;
 
-namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
+namespace Plugins.Shared.ECSPowerNetcode.Features.Synchronization.Generic
 {
     [UpdateInGroup(typeof(ServerNetworkEntitySynchronizationSystemGroup))]
     public abstract class ServerSyncComponentSystem<TComponent, TConverter> : JobComponentSystem

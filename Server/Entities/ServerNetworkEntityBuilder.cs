@@ -1,7 +1,7 @@
-using Plugins.ECSEntityBuilder;
-using Plugins.ECSPowerNetcode.Features.NetworkEntities;
+using Plugins.Shared.ECSEntityBuilder;
+using Plugins.Shared.ECSPowerNetcode.Features.NetworkEntities;
 
-namespace Plugins.ECSPowerNetcode.Server.Entities
+namespace Plugins.Shared.ECSPowerNetcode.Server.Entities
 {
     public abstract class ServerNetworkEntityBuilder<T> : EntityBuilder<T> where T : EntityBuilder<T>
     {

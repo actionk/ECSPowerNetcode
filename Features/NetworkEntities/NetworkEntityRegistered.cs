@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Plugins.ECSPowerNetcode.Features.NetworkEntities
+namespace Plugins.Shared.ECSPowerNetcode.Features.NetworkEntities
 {
     public struct NetworkEntityRegistered : ISystemStateComponentData
     {

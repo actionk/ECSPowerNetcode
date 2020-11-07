@@ -1,9 +1,9 @@
-using Plugins.ECSPowerNetcode.Client.Groups;
-using Plugins.ECSPowerNetcode.Shared;
+using Plugins.Shared.ECSPowerNetcode.Client.Groups;
+using Plugins.Shared.ECSPowerNetcode.Shared;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.ECSPowerNetcode.Client.Packets
+namespace Plugins.Shared.ECSPowerNetcode.Client.Packets
 {
     [UpdateInGroup(typeof(ClientRequestProcessingSystemGroup))]
     [UpdateInWorld(UpdateInWorld.TargetWorld.Client)]

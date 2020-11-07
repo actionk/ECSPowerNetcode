@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using JetBrains.Annotations;
 
-namespace Plugins.ECSPowerNetcode.Server.Exceptions
+namespace Plugins.Shared.ECSPowerNetcode.Server.Exceptions
 {
     public class ServerException : Exception
     {

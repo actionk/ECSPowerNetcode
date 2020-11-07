@@ -1,10 +1,10 @@
 using System.Linq;
-using Plugins.ECSEntityBuilder;
-using Plugins.ECSPowerNetcode.Server.Exceptions;
+using Plugins.Shared.ECSEntityBuilder;
+using Plugins.Shared.ECSPowerNetcode.Server.Exceptions;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.ECSPowerNetcode.Server.Packets
+namespace Plugins.Shared.ECSPowerNetcode.Server.Packets
 {
     public class ServerToClientRpcCommandBuilder : EntityBuilder<ServerToClientRpcCommandBuilder>
     {

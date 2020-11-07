@@ -1,11 +1,11 @@
-using Plugins.ECSPowerNetcode.Shared.Systems;
+using Plugins.Shared.ECSPowerNetcode.Shared.Systems;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.NetCode;
 using Unity.Networking.Transport;
 
-namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
+namespace Plugins.Shared.ECSPowerNetcode.Features.Synchronization.Transform
 {
     [BurstCompile]
     public struct SyncTransformFromServerToClientCommand : IComponentData, IRpcCommandSerializer<SyncTransformFromServerToClientCommand>

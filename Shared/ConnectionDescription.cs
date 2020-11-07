@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Plugins.ECSPowerNetcode.Shared
+namespace Plugins.Shared.ECSPowerNetcode.Shared
 {
     public class ConnectionDescription
     {

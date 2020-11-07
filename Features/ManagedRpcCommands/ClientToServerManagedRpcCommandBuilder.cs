@@ -1,9 +1,9 @@
-using Plugins.ECSEntityBuilder;
-using Plugins.ECSPowerNetcode.Client;
+using Plugins.Shared.ECSEntityBuilder;
+using Plugins.Shared.ECSPowerNetcode.Client;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
+namespace Plugins.Shared.ECSPowerNetcode.Features.ManagedRpcCommands
 {
     public class ClientToServerManagedRpcCommandBuilder : EntityBuilder<ClientToServerManagedRpcCommandBuilder>
     {

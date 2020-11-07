@@ -1,7 +1,6 @@
 using Unity.Entities;
-using Unity.NetCode;
 
-namespace Plugins.ECSPowerNetcode.Server.Groups
+namespace Plugins.Shared.ECSPowerNetcode.Server.Groups
 {
     [UpdateInGroup(typeof(Unity.NetCode.ServerSimulationSystemGroup))]
     [UpdateAfter(typeof(ServerRequestProcessingSystemGroup))]

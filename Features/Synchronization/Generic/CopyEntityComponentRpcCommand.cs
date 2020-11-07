@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.NetCode;
 using Unity.Networking.Transport;
 
-namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
+namespace Plugins.Shared.ECSPowerNetcode.Features.Synchronization.Generic
 {
     [BurstCompile]
     public struct CopyEntityComponentRpcCommand<TComponent, TConverter> : IComponentData, IRpcCommandSerializer<CopyEntityComponentRpcCommand<TComponent, TConverter>>

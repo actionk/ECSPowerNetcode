@@ -1,4 +1,4 @@
-namespace Plugins.ECSPowerNetcode.Server.Entities
+namespace Plugins.Shared.ECSPowerNetcode.Server.Entities
 {
     public interface INetworkEntityIdFactory
     {

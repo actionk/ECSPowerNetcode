@@ -1,7 +1,7 @@
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Plugins.ECSPowerNetcode.Client.Components
+namespace Plugins.Shared.ECSPowerNetcode.Client.Components
 {
     public struct ConnectToServer : IComponentData
     {

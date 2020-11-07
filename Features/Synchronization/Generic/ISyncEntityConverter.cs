@@ -1,6 +1,6 @@
 using Unity.Networking.Transport;
 
-namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
+namespace Plugins.Shared.ECSPowerNetcode.Features.Synchronization.Generic
 {
     public interface ISyncEntityConverter<T>
     {

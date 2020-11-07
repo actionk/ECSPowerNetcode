@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Plugins.ECSPowerNetcode.Client.Packets
+namespace Plugins.Shared.ECSPowerNetcode.Client.Packets
 {
     public interface INetworkEntityCopyRpcCommand : IComponentData
     {

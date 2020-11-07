@@ -1,8 +1,8 @@
-using Plugins.ECSEntityBuilder;
+using Plugins.Shared.ECSEntityBuilder;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.ECSPowerNetcode.Client.Packets
+namespace Plugins.Shared.ECSPowerNetcode.Client.Packets
 {
     public class ClientToServerRpcCommandBuilder : EntityBuilder<ClientToServerRpcCommandBuilder>
     {

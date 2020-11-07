@@ -1,9 +1,9 @@
-using Plugins.ECSPowerNetcode.Client;
-using Plugins.ECSPowerNetcode.Client.Packets;
-using Plugins.ECSPowerNetcode.Shared;
+using Plugins.Shared.ECSPowerNetcode.Client;
+using Plugins.Shared.ECSPowerNetcode.Client.Packets;
+using Plugins.Shared.ECSPowerNetcode.Shared;
 using UnityEngine;
 
-namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
+namespace Plugins.Shared.ECSPowerNetcode.Features.ManagedRpcCommands
 {
     public class ClientReceiveManagedRpcCommandResultSystem : AClientReceiveRpcCommandSystem<ManagedRpcCommandResult>
     {

@@ -1,8 +1,8 @@
-using Plugins.ECSPowerNetcode.Server.Packets;
+using Plugins.Shared.ECSPowerNetcode.Server.Packets;
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
+namespace Plugins.Shared.ECSPowerNetcode.Features.ManagedRpcCommands
 {
     public abstract class AServerReceiveManagedRpcCommandSystem<T> : ComponentSystem where T : struct, IManagedRpcCommand, IRpcCommand
     {

@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
+namespace Plugins.Shared.ECSPowerNetcode.Features.Synchronization.Transform
 {
     public struct SyncTransformFromServerToClient : IComponentData
     {

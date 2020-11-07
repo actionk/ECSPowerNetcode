@@ -1,10 +1,10 @@
-using Plugins.ECSPowerNetcode.Client;
-using Plugins.ECSPowerNetcode.Client.Groups;
+using Plugins.Shared.ECSPowerNetcode.Client;
+using Plugins.Shared.ECSPowerNetcode.Client.Groups;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
 
-namespace Plugins.ECSPowerNetcode.Features.Synchronization.Generic
+namespace Plugins.Shared.ECSPowerNetcode.Features.Synchronization.Generic
 {
     [UpdateInGroup(typeof(ClientRequestProcessingSystemGroup))]
     public abstract class ClientSyncComponentSystem<TComponent, TConverter> : ComponentSystem

@@ -1,7 +1,7 @@
-using Plugins.ECSPowerNetcode.Server.Groups;
+using Plugins.Shared.ECSPowerNetcode.Server.Groups;
 using Unity.Entities;
 
-namespace Plugins.ECSPowerNetcode.Features.Synchronization.Groups
+namespace Plugins.Shared.ECSPowerNetcode.Features.Synchronization.Groups
 {
     [UpdateInGroup(typeof(ServerNetworkEntitySynchronizationSystemGroup))]
     [UpdateAfter(typeof(SynchronizationProcessSystemGroup))]

@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Plugins.ECSPowerNetcode.Server.Destroying
+namespace Plugins.Shared.ECSPowerNetcode.Server.Destroying
 {
     public struct ServerDestroy : IComponentData
     {

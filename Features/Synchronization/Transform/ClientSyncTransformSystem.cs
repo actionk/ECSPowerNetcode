@@ -1,11 +1,11 @@
-using Plugins.ECSPowerNetcode.Client;
-using Plugins.ECSPowerNetcode.Client.Groups;
+using Plugins.Shared.ECSPowerNetcode.Client;
+using Plugins.Shared.ECSPowerNetcode.Client.Groups;
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace Plugins.ECSPowerNetcode.Features.Synchronization.Transform
+namespace Plugins.Shared.ECSPowerNetcode.Features.Synchronization.Transform
 {
     [UpdateInGroup(typeof(ClientRequestProcessingSystemGroup))]
     public class ClientSyncTransformSystem : ComponentSystem

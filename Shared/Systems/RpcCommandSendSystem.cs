@@ -2,7 +2,7 @@
 using Unity.Entities;
 using Unity.NetCode;
 
-namespace Plugins.ECSPowerNetcode.Shared.Systems
+namespace Plugins.Shared.ECSPowerNetcode.Shared.Systems
 {
     public abstract class RpcCommandSendSystem<TActionSerializer, TActionRequest> : RpcCommandRequestSystem<TActionSerializer, TActionRequest>
         where TActionSerializer : struct, IRpcCommandSerializer<TActionRequest>

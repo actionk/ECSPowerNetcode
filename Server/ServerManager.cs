@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Plugins.ECSEntityBuilder.Worlds;
-using Plugins.ECSPowerNetcode.Server.Components;
-using Plugins.ECSPowerNetcode.Server.Entities;
-using Plugins.ECSPowerNetcode.Shared;
+using Plugins.Shared.ECSEntityBuilder.Worlds;
+using Plugins.Shared.ECSPowerNetcode.Server.Components;
+using Plugins.Shared.ECSPowerNetcode.Server.Entities;
+using Plugins.Shared.ECSPowerNetcode.Shared;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Plugins.ECSPowerNetcode.Server
+namespace Plugins.Shared.ECSPowerNetcode.Server
 {
     public class ServerManager
     {

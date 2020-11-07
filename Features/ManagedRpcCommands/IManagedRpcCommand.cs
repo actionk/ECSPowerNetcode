@@ -1,6 +1,6 @@
 using Unity.NetCode;
 
-namespace Plugins.ECSPowerNetcode.Features.ManagedRpcCommands
+namespace Plugins.Shared.ECSPowerNetcode.Features.ManagedRpcCommands
 {
     public interface IManagedRpcCommand : IRpcCommand
     {

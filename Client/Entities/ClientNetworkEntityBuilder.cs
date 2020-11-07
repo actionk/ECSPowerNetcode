@@ -1,8 +1,8 @@
 using System;
-using Plugins.ECSEntityBuilder;
-using Plugins.ECSPowerNetcode.Features.NetworkEntities;
+using Plugins.Shared.ECSEntityBuilder;
+using Plugins.Shared.ECSPowerNetcode.Features.NetworkEntities;
 
-namespace Plugins.ECSPowerNetcode.Client.Entities
+namespace Plugins.Shared.ECSPowerNetcode.Client.Entities
 {
     public abstract class ClientNetworkEntityBuilder<T> : EntityBuilder<T> where T : EntityBuilder<T>
     {

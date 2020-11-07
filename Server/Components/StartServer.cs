@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace Plugins.ECSPowerNetcode.Server.Components
+namespace Plugins.Shared.ECSPowerNetcode.Server.Components
 {
     public struct StartServer : IComponentData
     {

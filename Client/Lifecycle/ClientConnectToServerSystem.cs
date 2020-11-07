@@ -1,13 +1,13 @@
 using System.Net;
-using Plugins.ECSPowerNetcode.Client.Components;
-using Plugins.ECSPowerNetcode.Client.Groups;
+using Plugins.Shared.ECSPowerNetcode.Client.Components;
+using Plugins.Shared.ECSPowerNetcode.Client.Groups;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Networking.Transport;
 using UnityEngine;
 
-namespace Plugins.ECSPowerNetcode.Client.Lifecycle
+namespace Plugins.Shared.ECSPowerNetcode.Client.Lifecycle
 {
     [UpdateInGroup(typeof(ClientConnectionSystemGroup))]
     public class ClientConnectToServerSystem : ComponentSystem
