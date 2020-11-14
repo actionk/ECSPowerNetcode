@@ -13,7 +13,7 @@ namespace Plugins.ECSPowerNetcode.EntityBulderExtensions
             SetCreationStrategy(new CreateFromNetcodeArchetypeStrategy<T>(WorldType.DEFAULT));
         }
 
-        public new void CreateFromArchetype<T>(WorldType worldType)
+        public void CreateFromArchetype<T>(WorldType worldType)
             where T : IArchetypeDescriptor
         {
             SetCreationStrategy(new CreateFromNetcodeArchetypeStrategy<T>(worldType));

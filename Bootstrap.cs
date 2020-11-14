@@ -1,6 +1,7 @@
 ﻿using Plugins.ECSPowerNetcode.Worlds;
 using Unity.Entities;
 using Unity.NetCode;
+using UnityEngine.LowLevel;
 
 namespace Plugins.ECSPowerNetcode
 {
@@ -15,7 +16,10 @@ namespace Plugins.ECSPowerNetcode
             World.DefaultGameObjectInjectionWorld = world;
 
             DefaultWorldInitialization.AddSystemsToRootLevelSystemGroups(world, ExplicitDefaultWorldSystems);
-            ScriptBehaviourUpdateOrder.UpdatePlayerLoop(world);
+
+            var currentPlayerLoop = PlayerLoop.GetCurrentPlayerLoop();
+            ScriptBehaviourUpdateOrder.AddWorldToPlayerLoop(world, ref currentPlayerLoop);
+            PlayerLoop.SetPlayerLoop(currentPlayerLoop);
 
             CreateClientWorld(world, "ClientWorld");
             CreateServerWorld(world, "ServerWorld");
