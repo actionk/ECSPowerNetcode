@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Plugins.ECSPowerNetcode.Utils
@@ -160,6 +161,17 @@ namespace Plugins.ECSPowerNetcode.Utils
             }
 
             return result;
+        }
+    }
+
+    public static class MultiValueDictionaryExtensions
+    {
+        public static MultiValueDictionary<TKey, TValue> ToMultiValueDictionary<TKey, TValue>(this IEnumerable<TValue> values, Func<TValue, TKey> keySelector)
+        {
+            var multiValueDictionary = new MultiValueDictionary<TKey, TValue>();
+            foreach (var entry in values)
+                multiValueDictionary.Add(keySelector.Invoke(entry), entry);
+            return multiValueDictionary;
         }
     }
 }
