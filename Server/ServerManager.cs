@@ -62,6 +62,10 @@ namespace Plugins.ECSPowerNetcode.Server
             serverWorld.EntityManager.AddComponentData(startServerEntity, new StartServer {port = port});
         }
 
+        public void StopServer()
+        {
+        }
+
         public List<ConnectionDescription> AllConnections => m_openedConnectionsById.Values.ToList();
 
 #region Singleton

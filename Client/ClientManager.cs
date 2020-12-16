@@ -57,10 +57,14 @@ namespace Plugins.ECSPowerNetcode.Client
 
         public void Disconnect()
         {
+            Debug.Log("Disconnecting from server...");
+
             if (!IsConnected)
                 return;
 
             EntityWorldManager.Instance.Client.EntityManager.AddComponent<NetworkStreamRequestDisconnect>(ConnectionToServer.connectionEntity);
+
+            IsConnected = false;
         }
 
         public void AddEntityWaitingForManagedRpcCommandResult(Entity entity, ulong packetId)
@@ -79,7 +83,7 @@ namespace Plugins.ECSPowerNetcode.Client
             return null;
         }
 
-        #region Singleton
+#region Singleton
 
         private static ClientManager INSTANCE = new ClientManager();
 
@@ -105,6 +109,6 @@ namespace Plugins.ECSPowerNetcode.Client
         }
 #endif
 
-        #endregion
+#endregion
     }
 }
