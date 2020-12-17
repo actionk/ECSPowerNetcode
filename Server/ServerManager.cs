@@ -20,6 +20,7 @@ namespace Plugins.ECSPowerNetcode.Server
         public event OnPlayerDisconnected OnPlayerDisconnectedHandler;
 
         public uint Tick => EntityWorldManager.Instance.ServerTick;
+        public bool HasConnections => AllConnections.Count > 0;
 
         public INetworkEntityManager NetworkEntityManager { get; set; } = new DefaultNetworkEntityManager();
         public INetworkEntityIdFactory NetworkEntityIdFactory { get; set; } = new DefaultNetworkEntityIdFactory();
@@ -85,14 +86,12 @@ namespace Plugins.ECSPowerNetcode.Server
             get { return INSTANCE; }
         }
 
-#if UNITY_EDITOR
         // for quick play mode entering 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Reset()
         {
             INSTANCE = new ServerManager();
         }
-#endif
 
 #endregion
     }

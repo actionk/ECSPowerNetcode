@@ -13,8 +13,8 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
         {
             var builder = new ServerToClientRpcCommandBuilder();
             builder.AddComponentData(command)
-                .AddComponentData(new SendRpcCommandRequestComponent {TargetConnection = serverToClientConnection})
-                .SetName($"RpcCommand {typeof(T).Name}");
+                .AddComponentData(new SendRpcCommandRequestComponent {TargetConnection = serverToClientConnection});
+                //.SetName($"RpcCommand {typeof(T).Name}");
             return builder;
         }
 
@@ -26,8 +26,8 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
 
             var builder = new ServerToClientRpcCommandBuilder();
             builder.AddComponentData(packet)
-                .AddComponentData(new SendRpcCommandRequestComponent {TargetConnection = connection.connectionEntity})
-                .SetName($"RpcCommand {typeof(T).Name}");
+                .AddComponentData(new SendRpcCommandRequestComponent {TargetConnection = connection.connectionEntity});
+                //.SetName($"RpcCommand {typeof(T).Name}");
             return builder;
         }
 
@@ -35,8 +35,8 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
         {
             var builder = new ServerToClientRpcCommandBuilder();
             builder.AddComponentData(packet)
-                .AddComponentData(new SendRpcCommandRequestComponent()) // if there is no TargetConnection, it will be broadcasted
-                .SetName($"BroadcastRpcCommand {typeof(T).Name}");
+                .AddComponentData(new SendRpcCommandRequestComponent()); // if there is no TargetConnection, it will be broadcasted
+                //.SetName($"BroadcastRpcCommand {typeof(T).Name}");
             return builder;
         }
 
@@ -48,8 +48,8 @@ namespace Plugins.ECSPowerNetcode.Server.Packets
                 .ToArray();
 
             var builder = new ServerToClientMassiveRpcCommandBuilder(connectionsToSendTo);
-            builder.AddComponentData(packet)
-                .SetName($"RpcCommand {typeof(T).Name}");
+            builder.AddComponentData(packet);
+                //.SetName($"RpcCommand {typeof(T).Name}");
             return builder;
         }
     }

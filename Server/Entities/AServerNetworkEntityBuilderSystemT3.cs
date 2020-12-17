@@ -26,10 +26,13 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 .WithAll<NetworkEntity, NetworkEntityRegistered, TransferNetworkEntityToAllClients>()
                 .ForEach((Entity entity, ref NetworkEntity networkEntity, ref TSelector selectorComponent, ref TSelector2 selectorComponent2, ref TSelector3 selectorComponent3) =>
                 {
-                    var command = CreateTransferCommandForEntity(entity, ref networkEntity, ref selectorComponent, ref selectorComponent2, ref selectorComponent3);
-                    ServerToClientRpcCommandBuilder
-                        .Broadcast(command)
-                        .Build(PostUpdateCommands);
+                    if (ServerManager.Instance.HasConnections)
+                    {
+                        var command = CreateTransferCommandForEntity(entity, ref networkEntity, ref selectorComponent, ref selectorComponent2, ref selectorComponent3);
+                        ServerToClientRpcCommandBuilder
+                            .Broadcast(command)
+                            .Build(PostUpdateCommands);
+                    }
 
                     PostUpdateCommands.RemoveComponent<TransferNetworkEntityToAllClients>(entity);
                 });
@@ -39,12 +42,15 @@ namespace Plugins.ECSPowerNetcode.Server.Entities
                 .ForEach((Entity entity, DynamicBuffer<TransferNetworkEntityToClient> clients, ref NetworkEntity networkEntity, ref TSelector selectorComponent,
                     ref TSelector2 selectorComponent2, ref TSelector3 selectorComponent3) =>
                 {
-                    var command = CreateTransferCommandForEntity(entity, ref networkEntity, ref selectorComponent, ref selectorComponent2, ref selectorComponent3);
-                    foreach (var clientEntity in clients)
+                    if (ServerManager.Instance.HasConnections)
                     {
-                        ServerToClientRpcCommandBuilder
-                            .SendTo(clientEntity.clientConnection, command)
-                            .Build(PostUpdateCommands);
+                        var command = CreateTransferCommandForEntity(entity, ref networkEntity, ref selectorComponent, ref selectorComponent2, ref selectorComponent3);
+                        foreach (var clientEntity in clients)
+                        {
+                            ServerToClientRpcCommandBuilder
+                                .SendTo(clientEntity.clientConnection, command)
+                                .Build(PostUpdateCommands);
+                        }
                     }
 
                     PostUpdateCommands.RemoveComponent<TransferNetworkEntityToClient>(entity);

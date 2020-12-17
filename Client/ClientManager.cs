@@ -49,8 +49,6 @@ namespace Plugins.ECSPowerNetcode.Client
             if (!clientWorld.IsCreated)
                 throw new NotImplementedException("Client world doesn't exist!");
 
-            Disconnect();
-
             var connectToServer = clientWorld.EntityManager.CreateEntity();
             clientWorld.EntityManager.AddComponentData(connectToServer, new ConnectToServer {port = port, host = host});
         }

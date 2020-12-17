@@ -12,5 +12,13 @@ namespace Plugins.ECSPowerNetcode.Extensions
                 list.AddNoResize(entry);
             return list;
         }
+
+        public static int[] ToArray(this INativeList<int> nativeList)
+        {
+            var array = new int[nativeList.Length];
+            for (var i = 0; i < nativeList.Length; i++)
+                array[i] = nativeList[i];
+            return array;
+        }
     }
 }

@@ -9,10 +9,16 @@ namespace Plugins.ECSPowerNetcode
     {
         public override bool Initialize(string defaultWorldName)
         {
+            Initialize(true, true);
+            return true;
+        }
+
+        public void Initialize(bool createClientWorld, bool createServerWorld)
+        {
             var systems = DefaultWorldInitialization.GetAllSystems(WorldSystemFilterFlags.Default);
             GenerateSystemLists(systems);
 
-            var world = new World(defaultWorldName);
+            var world = new World("DefaultWorld");
             World.DefaultGameObjectInjectionWorld = world;
 
             DefaultWorldInitialization.AddSystemsToRootLevelSystemGroups(world, ExplicitDefaultWorldSystems);
@@ -21,11 +27,13 @@ namespace Plugins.ECSPowerNetcode
             ScriptBehaviourUpdateOrder.AddWorldToPlayerLoop(world, ref currentPlayerLoop);
             PlayerLoop.SetPlayerLoop(currentPlayerLoop);
 
-            CreateClientWorld(world, "ClientWorld");
-            CreateServerWorld(world, "ServerWorld");
+            if (createClientWorld)
+                CreateClientWorld(world, "ClientWorld");
+
+            if (createServerWorld)
+                CreateServerWorld(world, "ServerWorld");
 
             EntityWorldManager.Instance.Initialize();
-            return true;
         }
     }
 }
