@@ -48,11 +48,6 @@ namespace Plugins.ECSPowerNetcode.Archetypes
 
         private readonly Dictionary<Type, EntityArchetypeHolder> m_archetypes = new Dictionary<Type, EntityArchetypeHolder>();
 
-        public void Cleanup()
-        {
-            
-        }
-
         public void InitializeArchetypes(Assembly assembly)
         {
             foreach (var type in assembly.GetTypes())
