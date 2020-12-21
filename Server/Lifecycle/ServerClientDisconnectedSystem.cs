@@ -13,13 +13,14 @@ namespace Plugins.ECSPowerNetcode.Server.Lifecycle
         {
             Entities
                 .WithAll<NetworkStreamDisconnected>()
-                .ForEach((Entity entity, ref NetworkIdComponent networkIdComponent, ref CommandTargetComponent commandTargetComponent) =>
-                {
-                    PostUpdateCommands.DestroyEntity(commandTargetComponent.targetEntity);
-                    ServerManager.Instance.OnDisconnected(networkIdComponent.Value);
+                .ForEach(
+                    (Entity entity, ref NetworkIdComponent networkIdComponent, ref CommandTargetComponent commandTargetComponent, ref NetworkStreamDisconnected disconnected) =>
+                    {
+                        PostUpdateCommands.DestroyEntity(commandTargetComponent.targetEntity);
+                        ServerManager.Instance.OnDisconnected(networkIdComponent.Value);
 
-                    Debug.Log($"[Server] Client disconnected from server with network id = [{networkIdComponent.Value}]");
-                });
+                        Debug.Log($"[Server] Client disconnected from server with network id = [{networkIdComponent.Value}] because: {disconnected.Reason}");
+                    });
         }
     }
 }

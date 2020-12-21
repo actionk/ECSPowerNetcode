@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Ghosts:
-  - prefab: {fileID: 5372516634151237887, guid: fa624df06de47f64daccfbbfedf9eed6, type: 3}
+  - prefab: {fileID: 5372516634151237887, guid: fa624df06de47f64daccfbbfedf9eed6,
+      type: 3}
     enabled: 1
 --- !u!114 &-441121593477100115
 MonoBehaviour:
@@ -60,5 +61,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 0
-  ConversionTarget: 3
+  ConversionTarget: -1
   canDestroy: 0

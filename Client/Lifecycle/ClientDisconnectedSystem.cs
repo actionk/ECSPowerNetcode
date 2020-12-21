@@ -12,12 +12,12 @@ namespace Plugins.ECSPowerNetcode.Client.Lifecycle
         {
             Entities
                 .WithAll<NetworkStreamDisconnected>()
-                .ForEach((Entity entity, ref CommandTargetComponent commandTargetComponent) =>
+                .ForEach((Entity entity, ref NetworkStreamDisconnected disconnected, ref CommandTargetComponent commandTargetComponent) =>
                 {
                     PostUpdateCommands.DestroyEntity(commandTargetComponent.targetEntity);
                     ClientManager.Instance.OnDisconnectedFromServer();
 
-                    Debug.Log($"[Client] Disconnected from server");
+                    Debug.Log($"[Client] Disconnected from server. Reason: {disconnected.Reason}");
                 });
         }
     }
