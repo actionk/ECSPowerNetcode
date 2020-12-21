@@ -98,14 +98,12 @@ namespace Plugins.ECSPowerNetcode.Client
             get { return INSTANCE; }
         }
 
-#if UNITY_EDITOR
         // for quick play mode entering 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Reset()
         {
             INSTANCE = new ClientManager();
         }
-#endif
 
 #endregion
     }

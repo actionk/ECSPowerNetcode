@@ -70,15 +70,13 @@ namespace Plugins.ECSPowerNetcode.Worlds
             get { return INSTANCE; }
         }
 
-#if UNITY_EDITOR
         // for quick play mode entering 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Reset()
         {
             INSTANCE = new EntityWorldManager();
         }
-#endif
-
+        
         #endregion
     }
 }

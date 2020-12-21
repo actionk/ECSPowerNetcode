@@ -28,14 +28,12 @@ namespace Plugins.ECSPowerNetcode.Archetypes
             get { return INSTANCE; }
         }
 
-#if UNITY_EDITOR
         // for quick play mode entering 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         public static void Reset()
         {
             INSTANCE = new NetcodeEntityArchetypeManager();
         }
-#endif
 
 #endregion
 
