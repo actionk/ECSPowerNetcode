@@ -1,6 +1,7 @@
 using System;
+using Plugins.Shared.Netcode.Entities.Groups.Client;
+using Plugins.Shared.Netcode.Entities.Groups.Server;
 using Unity.Entities;
-using Unity.NetCode;
 using Unity.Transforms;
 using UnityEngine;
 
@@ -10,9 +11,9 @@ namespace Plugins.ECSPowerNetcode.Worlds
     {
         public World Default { get; private set; }
         public World Client { get; private set; }
-        public uint ClientTick => m_clientSimulationSystemGroup.ServerTick;
+        public uint ClientTick => 0; //m_clientSimulationSystemGroup.ServerTick;
         public World Server { get; private set; }
-        public uint ServerTick => m_serverSimulationSystemGroup.ServerTick;
+        public uint ServerTick => 0; //m_serverSimulationSystemGroup.ServerTick;
         public bool HasServerWorld { get; private set; }
         public bool HasClientWorld { get; private set; }
 
@@ -53,7 +54,7 @@ namespace Plugins.ECSPowerNetcode.Worlds
             throw new NotImplementedException();
         }
 
-        #region Singleton
+#region Singleton
 
         private static EntityWorldManager INSTANCE = new EntityWorldManager();
 
@@ -76,7 +77,7 @@ namespace Plugins.ECSPowerNetcode.Worlds
         {
             INSTANCE = new EntityWorldManager();
         }
-        
-        #endregion
+
+#endregion
     }
 }

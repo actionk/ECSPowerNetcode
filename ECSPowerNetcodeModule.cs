@@ -1,6 +1,4 @@
 ﻿using Plugins.ECSPowerNetcode.Archetypes;
-using Plugins.ECSPowerNetcode.Client;
-using Plugins.ECSPowerNetcode.Server;
 using Plugins.ECSPowerNetcode.Worlds;
 using Unity.Collections;
 using Unity.Entities;
@@ -17,8 +15,8 @@ namespace Plugins.ECSPowerNetcode
             // clean module
             NetcodeEntityArchetypeManager.Reset();
             EntityWorldManager.Reset();
-            ClientManager.Reset();
-            ServerManager.Reset();
+            //ClientManager.Reset();
+            //ServerManager.Reset();
         }
 
         public static void Shutdown()

@@ -1,5 +1,5 @@
+using Plugins.Shared.Netcode.Entities.Groups.Server;
 using Unity.Entities;
-using Unity.NetCode;
 
 namespace Plugins.ECSPowerNetcode.Server.Groups
 {
